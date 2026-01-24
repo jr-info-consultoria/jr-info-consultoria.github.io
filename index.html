@@ -30,38 +30,19 @@
             background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); 
         }
 
-        h1 { 
-            color: #fff; 
-            font-size: 5rem; 
-            letter-spacing: 4px; 
-            margin: 0;
-            text-transform: uppercase;
-            /* Efecto Neón Azul sutil detrás de INF01 */
-            text-shadow: 0 0 15px var(--neon-glow), 0 0 30px rgba(88, 166, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* ESTILO PARA TU NUEVO LOGO PNG */
+        .main-logo {
+            max-width: 400px; /* Ajusta el tamaño a tu gusto */
+            width: 100%;
+            height: auto;
+            /* Efecto Neón Azul sutil para la imagen PNG */
+            filter: drop-shadow(0 0 15px var(--neon-glow)) drop-shadow(0 0 30px rgba(88, 166, 255, 0.2));
+            margin-bottom: 20px;
+            transition: 0.4s;
         }
 
-        /* ESTILO ESPECÍFICO PARA LA RANURA DE LLAVE EN EL CERO */
-        .keyhole-zero {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* La ranura (cerradura) */
-        .keyhole-zero::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 24px;
-            background-color: var(--bg); /* Hace el efecto de hueco */
-            /* Dibujo de la cerradura: Círculo arriba y trapecio abajo */
-            clip-path: polygon(50% 0%, 80% 15%, 80% 35%, 65% 45%, 100% 100%, 0% 100%, 35% 45%, 20% 35%, 20% 15%);
-            border-radius: 50% 50% 0 0;
-            transform: translateY(2px);
+        .main-logo:hover {
+            filter: drop-shadow(0 0 25px var(--neon-glow)) drop-shadow(0 0 45px rgba(88, 166, 255, 0.4));
         }
 
         .hero p { 
@@ -182,7 +163,9 @@
 
     <section class="hero">
         <div style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Infraestructura & Marketing</div>
-        <h1>INF<span class="keyhole-zero">0</span>1</h1>
+        
+        <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo">
+
         <p>Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.</p>
         <a href="#" class="cta-btn" onclick="toggleChat()"><i class="fas fa-shield-halved"></i> Iniciar Diagnóstico</a>
     </section>
