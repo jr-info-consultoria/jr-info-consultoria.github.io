@@ -130,13 +130,13 @@
             box-shadow: 0 0 20px var(--accent);
         }
 
-        /* CHATBOT STYLES */
+        /* CHATBOT STYLES RECARNADO */
         #chat-container {
             position: fixed;
             bottom: 100px;
             right: 30px;
             width: 350px;
-            height: 450px;
+            height: 500px;
             background: var(--card-bg);
             border: 1px solid #30363d;
             border-radius: 15px;
@@ -158,15 +158,38 @@
             justify-content: space-between;
         }
 
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; }
-        .bot-msg { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; scroll-behavior: smooth; }
+        .bot-msg { background: rgba(88, 166, 255, 0.05); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--accent); color: #fff; }
+        .user-msg { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: right; color: var(--accent); }
 
-        #chat-options { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .opt-btn { 
-            background: transparent; border: 1px solid #30363d; color: var(--text); 
-            padding: 8px; border-radius: 5px; cursor: pointer; text-align: left; transition: 0.2s;
+        #chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #30363d;
+            display: flex;
+            gap: 10px;
         }
-        .opt-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        #user-input {
+            flex: 1;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #user-input:focus { border-color: var(--accent); }
+
+        .send-btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
         #chat-trigger {
             position: fixed;
@@ -234,7 +257,10 @@
             <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
         </div>
         <div id="chat-messages"></div>
-        <div id="chat-options"></div>
+        <div id="chat-input-area">
+            <input type="text" id="user-input" placeholder="Escriba su consulta..." onkeypress="handleKey(event)">
+            <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
     </div>
 
     <footer id="footer-copy">
@@ -242,7 +268,6 @@
     </footer>
 
     <script>
-        // Diccionario de Traducciones
         const texts = {
             es: {
                 heroTag: "Infraestructura & Marketing",
@@ -256,11 +281,9 @@
                 srv3Text: "Sistemas autónomos de atención y ventas optimizados para tu negocio.",
                 footer: "© 2026 INF01 | Atención 100% Digital via Chat & Email",
                 botName: "🤖 INF01 Assistant",
-                botStart: "Bienvenido a la red **INF01**. Soy su asistente virtual de IA. ¿En qué área requiere blindaje o crecimiento hoy?",
-                opt1: "🛡️ Seguridad Digital",
-                opt2: "🌍 Marketing Global",
-                opt3: "🤖 Sistemas de IA",
-                botFinal: "Excelente elección. He registrado su solicitud. Para enviarle un informe técnico, por favor deje su correo o escriba a joseruizgarcia@proton.me. Mi sistema le contactará pronto."
+                botStart: "Bienvenido a la red **INF01**. Soy su especialista de IA. ¿En qué puedo blindar su negocio hoy?",
+                placeholder: "Escriba su consulta...",
+                thinking: "Analizando perímetros..."
             },
             en: {
                 heroTag: "Infrastructure & Marketing",
@@ -269,30 +292,26 @@
                 srv1Title: "Digital Shielding",
                 srv1Text: "Asset protection and confidentiality under international standards.",
                 srv2Title: "Pro Marketing",
-                srv2Desc: "Digital conversion strategies to scale brands globally.", // Mantenido para coherencia
                 srv2Text: "Digital conversion strategies to scale brands globally.",
                 srv3Title: "AI Agents",
                 srv3Text: "Autonomous customer service and sales systems optimized for your business.",
                 footer: "© 2026 INF01 | 100% Digital Support via Chat & Email",
                 botName: "🤖 INF01 Assistant",
-                botStart: "Welcome to the **INF01** network. I am your AI virtual assistant. Which area requires shielding or growth today?",
-                opt1: "🛡️ Digital Security",
-                opt2: "🌍 Global Marketing",
-                opt3: "🤖 AI Systems",
-                botFinal: "Excellent choice. I have recorded your request. To send you a technical report, please leave your email or write to joseruizgarcia@proton.me. My system will contact you soon."
+                botStart: "Welcome to the **INF01** network. I am your AI specialist. How can I shield your business today?",
+                placeholder: "Type your query...",
+                thinking: "Analyzing perimeters..."
             }
         };
 
         let currentLang = 'es';
+        const chatContainer = document.getElementById('chat-container');
+        const messagesDiv = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
 
         function changeLanguage(lang) {
             currentLang = lang;
-            
-            // Actualizar Botones
             document.getElementById('btn-es').classList.toggle('active', lang === 'es');
             document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-
-            // Traducir Contenido
             document.getElementById('hero-tag').innerText = texts[lang].heroTag;
             document.getElementById('hero-text').innerText = texts[lang].heroText;
             document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${texts[lang].heroCta}`;
@@ -304,55 +323,54 @@
             document.getElementById('srv3-text').innerText = texts[lang].srv3Text;
             document.getElementById('footer-copy').innerHTML = `<p>${texts[lang].footer}</p>`;
             document.getElementById('bot-header-name').innerText = texts[lang].botName;
-
-            // Reiniciar Bot con el nuevo idioma
-            messagesDiv.innerHTML = '';
-            renderStep('start');
+            userInput.placeholder = texts[lang].placeholder;
+            
+            messagesDiv.innerHTML = `<div class="bot-msg">${texts[lang].botStart}</div>`;
         }
-
-        const chatContainer = document.getElementById('chat-container');
-        const messagesDiv = document.getElementById('chat-messages');
-        const optionsDiv = document.getElementById('chat-options');
 
         function toggleChat() {
             chatContainer.classList.toggle('chat-closed');
+            if (messagesDiv.innerHTML === '') {
+                messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
+            }
         }
 
-        // Lógica del Bot Dinámica
-        const flow = {
-            start: {
-                get text() { return texts[currentLang].botStart; },
-                get options() { return [
-                    { text: texts[currentLang].opt1, next: 'final' },
-                    { text: texts[currentLang].opt2, next: 'final' },
-                    { text: texts[currentLang].opt3, next: 'final' }
-                ]; }
-            },
-            final: {
-                get text() { return texts[currentLang].botFinal; },
-                get options() { return [{ text: "🔄 Reset", next: 'start' }]; }
-            }
-        };
+        function handleKey(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
 
-        function renderStep(stepKey) {
-            const step = flow[stepKey];
-            messagesDiv.innerHTML += `<div class="bot-msg">${step.text}</div>`;
-            optionsDiv.innerHTML = '';
-            
-            step.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'opt-btn';
-                btn.innerText = opt.text;
-                btn.onclick = () => {
-                    messagesDiv.innerHTML += `<div class="bot-msg" style="border-left-color:gray; opacity:0.5">${currentLang === 'es' ? 'Comando recibido' : 'Command received'}: ${opt.text}</div>`;
-                    renderStep(opt.next);
-                };
-                optionsDiv.appendChild(btn);
-            });
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Mostrar mensaje del usuario
+            messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
+            userInput.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Efecto pensando
+            const loadingId = "loading-" + Date.now();
+            messagesDiv.innerHTML += `<div id="${loadingId}" class="bot-msg"><b>INF01:</b> ${texts[currentLang].thinking}</div>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, lang: currentLang })
+                });
+
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+                messagesDiv.innerHTML += `<div class="bot-msg">${data.reply}</div>`;
+            } catch (error) {
+                document.getElementById(loadingId).innerHTML = "Error de conexión. Protocolo de seguridad activo.";
+            }
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        renderStep('start');
+        // Inicio por defecto
+        messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
     </script>
 </body>
 </html>
