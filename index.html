@@ -3,53 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JR INFO | Blindaje Digital</title>
+    <title>INF01 | Blindaje Digital & Marketing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; --text: #c9d1d9; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; }
-        .hero { text-align: center; padding: 120px 20px; background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); }
-        h1 { color: #fff; font-size: 3.5rem; letter-spacing: -2px; margin: 0; }
-        .hero p { font-size: 1.2rem; color: #8b949e; max-width: 600px; margin: 20px auto; }
-        .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 80px; margin-top: -50px; }
-        .card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 40px 30px; width: 300px; text-align: center; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        :root { 
+            --bg: #0d1117; 
+            --card-bg: #161b22; 
+            --accent: #58a6ff; 
+            --text: #c9d1d9; 
+            --neon-glow: rgba(88, 166, 255, 0.6);
+        }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+
+        /* Hero con efecto Neón */
+        .hero { 
+            text-align: center; 
+            padding: 140px 20px; 
+            background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); 
+        }
+
+        h1 { 
+            color: #fff; 
+            font-size: 5rem; 
+            letter-spacing: 4px; 
+            margin: 0;
+            text-transform: uppercase;
+            /* Efecto Neón Azul sutil detrás de INF01 */
+            text-shadow: 0 0 15px var(--neon-glow), 0 0 30px rgba(88, 166, 255, 0.2);
+        }
+
+        .hero p { 
+            font-size: 1.1rem; 
+            color: #8b949e; 
+            max-width: 600px; 
+            margin: 25px auto; 
+            line-height: 1.6;
+        }
+
+        /* Servicios */
+        .services { 
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; 
+            flex-wrap: wrap; 
+            padding: 0 20px 80px; 
+            margin-top: -60px; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid #30363d; 
+            border-radius: 12px; 
+            padding: 40px 30px; 
+            width: 280px; 
+            text-align: center; 
+            transition: 0.4s; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+
+        .card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+        }
+
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
-        .card h3 { color: #fff; margin-bottom: 15px; }
-        .cta-btn { display: inline-block; background: #238636; color: #fff; padding: 18px 40px; text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(35,134,54,0.4); }
-        .cta-btn:hover { background: #2ea043; transform: scale(1.05); }
-        footer { text-align: center; padding: 50px; border-top: 1px solid #30363d; color: #8b949e; }
+        .card h3 { color: #fff; margin-bottom: 15px; font-size: 1.4rem; }
+
+        .cta-btn { 
+            display: inline-block; 
+            background: transparent; 
+            color: var(--accent); 
+            padding: 18px 40px; 
+            text-decoration: none; 
+            border: 2px solid var(--accent);
+            border-radius: 50px; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            margin-top: 20px;
+        }
+
+        .cta-btn:hover { 
+            background: var(--accent); 
+            color: #000;
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* CHATBOT STYLES */
+        #chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 450px;
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+        .chat-closed { transform: scale(0); opacity: 0; pointer-events: none; }
+        
+        #chat-header {
+            background: rgba(88, 166, 255, 0.1);
+            padding: 15px;
+            border-bottom: 1px solid #30363d;
+            color: var(--accent);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; }
+        .bot-msg { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+
+        #chat-options { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .opt-btn { 
+            background: transparent; border: 1px solid #30363d; color: var(--text); 
+            padding: 8px; border-radius: 5px; cursor: pointer; text-align: left; transition: 0.2s;
+        }
+        .opt-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        #chat-trigger {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--accent);
+            z-index: 1001;
+            font-size: 1.5rem;
+        }
+
+        footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.9rem; }
     </style>
 </head>
 <body>
+
     <section class="hero">
-        <div style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Consultoría Tecnológica</div>
-        <h1>JR INFO</h1>
-        <p>Blindaje de infraestructura digital y estrategias de marketing para el mercado global.</p>
-        <a href="mailto:joseruizgarcia@proton.me" class="cta-btn"><i class="fas fa-shield-halved"></i> Solicitar Diagnóstico</a>
+        <div style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Infraestructura & Marketing</div>
+        <h1>INF01</h1>
+        <p>Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.</p>
+        <a href="#" class="cta-btn" onclick="toggleChat()"><i class="fas fa-shield-halved"></i> Iniciar Diagnóstico</a>
     </section>
 
     <section class="services">
         <div class="card">
             <i class="fas fa-user-shield"></i>
             <h3>Blindaje Digital</h3>
-            <p>Protección avanzada de secreto profesional y cumplimiento normativo internacional.</p>
+            <p>Protección de activos y confidencialidad bajo estándares internacionales.</p>
         </div>
         <div class="card">
-            <i class="fas fa-globe"></i>
-            <h3>Web Global</h3>
-            <p>Optimización de velocidad y SEO para captación de clientes en EE.UU. y Europa.</p>
+            <i class="fas fa-chart-line"></i>
+            <h3>Marketing Pro</h3>
+            <p>Estrategias de conversión digital para escalar marcas a nivel global.</p>
         </div>
         <div class="card">
-            <i class="fas fa-robot"></i>
-            <h3>Agentes de IA</h3>
-            <p>Implementación de sistemas inteligentes para atención automatizada 24/7.</p>
+            <i class="fas fa-microchip"></i>
+            <h3>Agentes IA</h3>
+            <p>Sistemas autónomos de atención y ventas optimizados para tu negocio.</p>
         </div>
     </section>
 
+    <button id="chat-trigger" onclick="toggleChat()">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <div id="chat-container" class="chat-closed">
+        <div id="chat-header">
+            <span>🛡️ INF01 Bot</span>
+            <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
+        </div>
+        <div id="chat-messages"></div>
+        <div id="chat-options"></div>
+    </div>
+
     <footer>
-        <p>&copy; 2026 JR INFO | Atención 100% Digital via Chat & Email</p>
+        <p>&copy; 2026 INF01 | Atención 100% Digital via Chat & Email</p>
     </footer>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const messagesDiv = document.getElementById('chat-messages');
+        const optionsDiv = document.getElementById('chat-options');
+
+        function toggleChat() {
+            chatContainer.classList.toggle('chat-closed');
+        }
+
+        const flow = {
+            start: {
+                text: "Bienvenido a la red **INF01**. Soy su asistente virtual. ¿En qué área requiere blindaje o crecimiento hoy?",
+                options: [
+                    { text: "🛡️ Seguridad Digital", next: 'seguridad' },
+                    { text: "🌍 Marketing Global", next: 'marketing' },
+                    { text: "🤖 Sistemas de IA", next: 'ia' }
+                ]
+            },
+            seguridad: {
+                text: "Entendido. La protección es nuestra prioridad. ¿Qué activo desea asegurar?",
+                options: [
+                    { text: "Cuentas y Redes", next: 'final' },
+                    { text: "Datos de Clientes", next: 'final' }
+                ]
+            },
+            marketing: {
+                text: "Analizando mercado... ¿Hacia dónde quiere proyectar su marca?",
+                options: [
+                    { text: "Mercado Local (CR)", next: 'final' },
+                    { text: "Mercado Global", next: 'final' }
+                ]
+            },
+            ia: {
+                text: "Automatización en proceso. ¿Qué desea optimizar?",
+                options: [
+                    { text: "Atención al Cliente", next: 'final' },
+                    { text: "Ventas Automáticas", next: 'final' }
+                ]
+            },
+            final: {
+                text: "Excelente elección. Para enviarle un informe técnico, por favor deje su correo o escriba a joseruizgarcia@proton.me. Un especialista le contactará vía chat.",
+                options: [{ text: "🔄 Reiniciar", next: 'start' }]
+            }
+        };
+
+        function renderStep(stepKey) {
+            const step = flow[stepKey];
+            messagesDiv.innerHTML += `<div class="bot-msg">${step.text}</div>`;
+            optionsDiv.innerHTML = '';
+            
+            step.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => {
+                    messagesDiv.innerHTML += `<div class="bot-msg" style="border-left-color:gray; opacity:0.5">Seleccionado: ${opt.text}</div>`;
+                    renderStep(opt.next);
+                };
+                optionsDiv.appendChild(btn);
+            });
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        renderStep('start');
+    </script>
 </body>
 </html>
