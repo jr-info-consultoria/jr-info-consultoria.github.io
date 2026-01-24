@@ -23,6 +23,35 @@
             overflow-x: hidden;
         }
 
+        /* SELECTOR DE IDIOMA */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
         /* Hero con efecto Neón */
         .hero { 
             text-align: center; 
@@ -30,12 +59,10 @@
             background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); 
         }
 
-        /* ESTILO PARA TU NUEVO LOGO PNG */
         .main-logo {
-            max-width: 400px; /* Ajusta el tamaño a tu gusto */
+            max-width: 400px; 
             width: 100%;
             height: auto;
-            /* Efecto Neón Azul sutil para la imagen PNG */
             filter: drop-shadow(0 0 15px var(--neon-glow)) drop-shadow(0 0 30px rgba(88, 166, 255, 0.2));
             margin-bottom: 20px;
             transition: 0.4s;
@@ -94,6 +121,7 @@
             font-weight: bold; 
             transition: 0.3s; 
             margin-top: 20px;
+            cursor: pointer;
         }
 
         .cta-btn:hover { 
@@ -164,30 +192,35 @@
 </head>
 <body>
 
+    <div class="lang-switcher">
+        <button id="btn-es" class="lang-btn active" onclick="changeLanguage('es')">ES</button>
+        <button id="btn-en" class="lang-btn" onclick="changeLanguage('en')">EN</button>
+    </div>
+
     <section class="hero">
-        <div style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Infraestructura & Marketing</div>
+        <div id="hero-tag" style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Infraestructura & Marketing</div>
         
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo">
 
-        <p>Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.</p>
-        <a href="#" class="cta-btn" onclick="toggleChat()"><i class="fas fa-robot"></i> Iniciar Diagnóstico</a>
+        <p id="hero-text">Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.</p>
+        <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico</a>
     </section>
 
     <section class="services">
         <div class="card">
             <i class="fas fa-user-shield"></i>
-            <h3>Blindaje Digital</h3>
-            <p>Protección de activos y confidencialidad bajo estándares internacionales.</p>
+            <h3 id="srv1-title">Blindaje Digital</h3>
+            <p id="srv1-text">Protección de activos y confidencialidad bajo estándares internacionales.</p>
         </div>
         <div class="card">
             <i class="fas fa-chart-line"></i>
-            <h3>Marketing Pro</h3>
-            <p>Estrategias de conversión digital para escalar marcas a nivel global.</p>
+            <h3 id="srv2-title">Marketing Pro</h3>
+            <p id="srv2-text">Estrategias de conversión digital para escalar marcas a nivel global.</p>
         </div>
         <div class="card">
             <i class="fas fa-microchip"></i>
-            <h3>Agentes IA</h3>
-            <p>Sistemas autónomos de atención y ventas optimizados para tu negocio.</p>
+            <h3 id="srv3-title">Agentes IA</h3>
+            <p id="srv3-text">Sistemas autónomos de atención y ventas optimizados para tu negocio.</p>
         </div>
     </section>
 
@@ -197,18 +230,86 @@
 
     <div id="chat-container" class="chat-closed">
         <div id="chat-header">
-            <span>🤖 INF01 Assistant</span>
+            <span id="bot-header-name">🤖 INF01 Assistant</span>
             <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
         </div>
         <div id="chat-messages"></div>
         <div id="chat-options"></div>
     </div>
 
-    <footer>
+    <footer id="footer-copy">
         <p>&copy; 2026 INF01 | Atención 100% Digital via Chat & Email</p>
     </footer>
 
     <script>
+        // Diccionario de Traducciones
+        const texts = {
+            es: {
+                heroTag: "Infraestructura & Marketing",
+                heroText: "Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.",
+                heroCta: "Iniciar Diagnóstico",
+                srv1Title: "Blindaje Digital",
+                srv1Text: "Protección de activos y confidencialidad bajo estándares internacionales.",
+                srv2Title: "Marketing Pro",
+                srv2Text: "Estrategias de conversión digital para escalar marcas a nivel global.",
+                srv3Title: "Agentes IA",
+                srv3Text: "Sistemas autónomos de atención y ventas optimizados para tu negocio.",
+                footer: "© 2026 INF01 | Atención 100% Digital via Chat & Email",
+                botName: "🤖 INF01 Assistant",
+                botStart: "Bienvenido a la red **INF01**. Soy su asistente virtual de IA. ¿En qué área requiere blindaje o crecimiento hoy?",
+                opt1: "🛡️ Seguridad Digital",
+                opt2: "🌍 Marketing Global",
+                opt3: "🤖 Sistemas de IA",
+                botFinal: "Excelente elección. He registrado su solicitud. Para enviarle un informe técnico, por favor deje su correo o escriba a joseruizgarcia@proton.me. Mi sistema le contactará pronto."
+            },
+            en: {
+                heroTag: "Infrastructure & Marketing",
+                heroText: "Digital shielding and marketing strategies designed for the global market. Impenetrable security, boundless reach.",
+                heroCta: "Start Diagnosis",
+                srv1Title: "Digital Shielding",
+                srv1Text: "Asset protection and confidentiality under international standards.",
+                srv2Title: "Pro Marketing",
+                srv2Desc: "Digital conversion strategies to scale brands globally.", // Mantenido para coherencia
+                srv2Text: "Digital conversion strategies to scale brands globally.",
+                srv3Title: "AI Agents",
+                srv3Text: "Autonomous customer service and sales systems optimized for your business.",
+                footer: "© 2026 INF01 | 100% Digital Support via Chat & Email",
+                botName: "🤖 INF01 Assistant",
+                botStart: "Welcome to the **INF01** network. I am your AI virtual assistant. Which area requires shielding or growth today?",
+                opt1: "🛡️ Digital Security",
+                opt2: "🌍 Global Marketing",
+                opt3: "🤖 AI Systems",
+                botFinal: "Excellent choice. I have recorded your request. To send you a technical report, please leave your email or write to joseruizgarcia@proton.me. My system will contact you soon."
+            }
+        };
+
+        let currentLang = 'es';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // Actualizar Botones
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+            // Traducir Contenido
+            document.getElementById('hero-tag').innerText = texts[lang].heroTag;
+            document.getElementById('hero-text').innerText = texts[lang].heroText;
+            document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${texts[lang].heroCta}`;
+            document.getElementById('srv1-title').innerText = texts[lang].srv1Title;
+            document.getElementById('srv1-text').innerText = texts[lang].srv1Text;
+            document.getElementById('srv2-title').innerText = texts[lang].srv2Title;
+            document.getElementById('srv2-text').innerText = texts[lang].srv2Text;
+            document.getElementById('srv3-title').innerText = texts[lang].srv3Title;
+            document.getElementById('srv3-text').innerText = texts[lang].srv3Text;
+            document.getElementById('footer-copy').innerHTML = `<p>${texts[lang].footer}</p>`;
+            document.getElementById('bot-header-name').innerText = texts[lang].botName;
+
+            // Reiniciar Bot con el nuevo idioma
+            messagesDiv.innerHTML = '';
+            renderStep('start');
+        }
+
         const chatContainer = document.getElementById('chat-container');
         const messagesDiv = document.getElementById('chat-messages');
         const optionsDiv = document.getElementById('chat-options');
@@ -217,39 +318,19 @@
             chatContainer.classList.toggle('chat-closed');
         }
 
+        // Lógica del Bot Dinámica
         const flow = {
             start: {
-                text: "Bienvenido a la red **INF01**. Soy su asistente virtual de IA. ¿En qué área requiere blindaje o crecimiento hoy?",
-                options: [
-                    { text: "🛡️ Seguridad Digital", next: 'seguridad' },
-                    { text: "🌍 Marketing Global", next: 'marketing' },
-                    { text: "🤖 Sistemas de IA", next: 'ia' }
-                ]
-            },
-            seguridad: {
-                text: "Entendido. La protección es nuestra prioridad. ¿Qué activo desea asegurar?",
-                options: [
-                    { text: "Cuentas y Redes", next: 'final' },
-                    { text: "Datos de Clientes", next: 'final' }
-                ]
-            },
-            marketing: {
-                text: "Analizando mercado... ¿Hacia dónde quiere proyectar su marca?",
-                options: [
-                    { text: "Mercado Local (CR)", next: 'final' },
-                    { text: "Mercado Global", next: 'final' }
-                ]
-            },
-            ia: {
-                text: "Automatización en proceso. ¿Qué desea optimizar?",
-                options: [
-                    { text: "Atención al Cliente", next: 'final' },
-                    { text: "Ventas Automáticas", next: 'final' }
-                ]
+                get text() { return texts[currentLang].botStart; },
+                get options() { return [
+                    { text: texts[currentLang].opt1, next: 'final' },
+                    { text: texts[currentLang].opt2, next: 'final' },
+                    { text: texts[currentLang].opt3, next: 'final' }
+                ]; }
             },
             final: {
-                text: "Excelente elección. He registrado su solicitud. Para enviarle un informe técnico, por favor deje su correo o escriba a joseruizgarcia@proton.me. Mi sistema le contactará pronto.",
-                options: [{ text: "🔄 Reiniciar", next: 'start' }]
+                get text() { return texts[currentLang].botFinal; },
+                get options() { return [{ text: "🔄 Reset", next: 'start' }]; }
             }
         };
 
@@ -263,7 +344,7 @@
                 btn.className = 'opt-btn';
                 btn.innerText = opt.text;
                 btn.onclick = () => {
-                    messagesDiv.innerHTML += `<div class="bot-msg" style="border-left-color:gray; opacity:0.5">Comando recibido: ${opt.text}</div>`;
+                    messagesDiv.innerHTML += `<div class="bot-msg" style="border-left-color:gray; opacity:0.5">${currentLang === 'es' ? 'Comando recibido' : 'Command received'}: ${opt.text}</div>`;
                     renderStep(opt.next);
                 };
                 optionsDiv.appendChild(btn);
