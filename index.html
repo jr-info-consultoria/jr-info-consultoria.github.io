@@ -154,6 +154,9 @@
             box-shadow: 0 0 15px var(--accent);
             z-index: 1001;
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.9rem; }
@@ -167,7 +170,7 @@
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo">
 
         <p>Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.</p>
-        <a href="#" class="cta-btn" onclick="toggleChat()"><i class="fas fa-shield-halved"></i> Iniciar Diagnóstico</a>
+        <a href="#" class="cta-btn" onclick="toggleChat()"><i class="fas fa-robot"></i> Iniciar Diagnóstico</a>
     </section>
 
     <section class="services">
@@ -189,12 +192,12 @@
     </section>
 
     <button id="chat-trigger" onclick="toggleChat()">
-        <i class="fas fa-comment-dots"></i>
+        <i class="fas fa-robot"></i>
     </button>
 
     <div id="chat-container" class="chat-closed">
         <div id="chat-header">
-            <span>🛡️ INF01 Bot</span>
+            <span>🤖 INF01 Assistant</span>
             <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
         </div>
         <div id="chat-messages"></div>
@@ -216,7 +219,7 @@
 
         const flow = {
             start: {
-                text: "Bienvenido a la red **INF01**. Soy su asistente virtual. ¿En qué área requiere blindaje o crecimiento hoy?",
+                text: "Bienvenido a la red **INF01**. Soy su asistente virtual de IA. ¿En qué área requiere blindaje o crecimiento hoy?",
                 options: [
                     { text: "🛡️ Seguridad Digital", next: 'seguridad' },
                     { text: "🌍 Marketing Global", next: 'marketing' },
@@ -245,7 +248,7 @@
                 ]
             },
             final: {
-                text: "Excelente elección. Para enviarle un informe técnico, por favor deje su correo o escriba a joseruizgarcia@proton.me. Un especialista le contactará vía chat.",
+                text: "Excelente elección. He registrado su solicitud. Para enviarle un informe técnico, por favor deje su correo o escriba a joseruizgarcia@proton.me. Mi sistema le contactará pronto.",
                 options: [{ text: "🔄 Reiniciar", next: 'start' }]
             }
         };
@@ -260,7 +263,7 @@
                 btn.className = 'opt-btn';
                 btn.innerText = opt.text;
                 btn.onclick = () => {
-                    messagesDiv.innerHTML += `<div class="bot-msg" style="border-left-color:gray; opacity:0.5">Seleccionado: ${opt.text}</div>`;
+                    messagesDiv.innerHTML += `<div class="bot-msg" style="border-left-color:gray; opacity:0.5">Comando recibido: ${opt.text}</div>`;
                     renderStep(opt.next);
                 };
                 optionsDiv.appendChild(btn);
