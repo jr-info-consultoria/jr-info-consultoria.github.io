@@ -343,33 +343,33 @@
             const message = userInput.value.trim();
             if (!message) return;
 
-            // Mostrar mensaje del usuario
             messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
             userInput.value = '';
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Efecto pensando
             const loadingId = "loading-" + Date.now();
             messagesDiv.innerHTML += `<div id="${loadingId}" class="bot-msg"><b>INF01:</b> ${texts[currentLang].thinking}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             try {
-                const response = await fetch('/api/chat', {
+                // CAMBIO CLAVE AQUÍ: Usamos la URL completa del servidor que ya funciona
+                const response = await fetch('https://inf-01-github-io.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: message, lang: currentLang })
                 });
 
                 const data = await response.json();
-                document.getElementById(loadingId).remove();
+                const loadingEl = document.getElementById(loadingId);
+                if (loadingEl) loadingEl.remove();
                 messagesDiv.innerHTML += `<div class="bot-msg">${data.reply}</div>`;
             } catch (error) {
-                document.getElementById(loadingId).innerHTML = "Error de conexión. Protocolo de seguridad activo.";
+                const loadingEl = document.getElementById(loadingId);
+                if (loadingEl) loadingEl.innerHTML = "Error de conexión. Protocolo de seguridad activo.";
             }
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // Inicio por defecto
         messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
     </script>
 </body>
