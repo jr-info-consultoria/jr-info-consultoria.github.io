@@ -352,8 +352,8 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             try {
-                // CAMBIO CLAVE AQUÍ: Usamos la URL completa del servidor que ya funciona
-                const response = await fetch('https://inf-01-github-io.vercel.app/api/chat', {
+                // LÍNEA MODIFICADA PARA CONEXIÓN DIRECTA INTERNA
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: message, lang: currentLang })
