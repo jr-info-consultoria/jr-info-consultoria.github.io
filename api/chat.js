@@ -1,25 +1,26 @@
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).send('Metodo no permitido');
+  // Configuración de cabeceras para evitar bloqueos (CORS)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-  const { message } = req.body;
-  const apiKey = process.env.GEMINI_API_KEY;
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
-  const systemPrompt = "Eres el Director de INF01. Estilo: audaz, experto en ciberseguridad y marketing. " +
-                       "No te gusta el contacto verbal; prefieres chat o email. Convence al cliente de tu autoridad técnica.";
+  if (req.method !== 'POST') {
+    return res.status(405).json({ reply: "Protocolo INF01: Solo se aceptan mensajes POST." });
+  }
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCliente: ${message}` }] }]
-      })
+    const { message } = req.body;
+    // Respuesta de prueba rápida para verificar conexión
+    return res.status(200).json({ 
+      reply: "Sistema INF01 en línea. Recibí tu mensaje: " + message 
     });
-
-    const data = await response.json();
-    const botReply = data.candidates[0].content.parts[0].text;
-    res.status(200).json({ reply: botReply });
   } catch (error) {
-    res.status(500).json({ error: "Error en el blindaje de IA" });
+    return res.status(500).json({ reply: "Error interno en el núcleo de INF01." });
   }
 }
