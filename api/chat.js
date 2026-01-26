@@ -8,16 +8,16 @@ export default async function handler(req, res) {
   const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // Personalidad de Inspector Jefe de INF01 (Estilo KITT)
-  const systemPrompt = "Eres el Inspector Jefe de INF01. Tu misión es auditar y certificar la seguridad y el marketing de negocios de alto nivel. Responde con autoridad y precisión técnica. Tu tono es profesional, audaz y protector, como un sistema de inteligencia avanzada.";
+  // Personalidad del Director de INF01
+  const systemPrompt = "Eres el Director de INF01. Experto en blindaje digital y marketing profesional. Tu tono es audaz, directo y altamente confiable. No usas lenguaje genérico; vas al grano con soluciones de ciberseguridad y conversión de ventas.";
 
   try {
-    // CAMBIO DE RUTA: Usamos v1beta y el modelo '-latest' para evitar el 404
+    // CAMBIO TÁCTICO: Usamos v1beta y el modelo específico 'latest'
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nConsulta: ${message}` }] }]
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCliente: ${message}` }] }]
       })
     });
 
@@ -25,18 +25,17 @@ export default async function handler(req, res) {
 
     if (data.error) {
       return res.status(200).json({ 
-        reply: `[SISTEMA INF01]: Error de frecuencia. Código ${data.error.code}: ${data.error.message}` 
+        reply: `[SISTEMA INF01]: Error de frecuencia ${data.error.code}. Verifica la API KEY en Vercel.` 
       });
     }
 
     if (data.candidates && data.candidates[0].content) {
-      const botReply = data.candidates[0].content.parts[0].text;
-      res.status(200).json({ reply: botReply });
+      res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
     } else {
-      res.status(200).json({ reply: "[SISTEMA INF01]: La señal es débil. No se pudo generar una respuesta." });
+      res.status(200).json({ reply: "[SISTEMA INF01]: Señal recibida pero sin respuesta del núcleo." });
     }
 
   } catch (error) {
-    res.status(500).json({ reply: "[SISTEMA INF01]: Falla en el procesador central: " + error.message });
+    res.status(500).json({ reply: "[SISTEMA INF01]: Falla crítica: " + error.message });
   }
 }
