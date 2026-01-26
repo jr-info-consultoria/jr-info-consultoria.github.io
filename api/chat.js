@@ -8,34 +8,38 @@ export default async function handler(req, res) {
   const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // Personalidad del Director de INF01
-  const systemPrompt = "Eres el Director de INF01. Experto en blindaje digital y marketing profesional. Tu tono es audaz, directo y altamente confiable. No usas lenguaje genérico; vas al grano con soluciones de ciberseguridad y conversión de ventas.";
+  if (!apiKey) {
+    return res.status(200).json({ reply: "[SISTEMA INF01]: Alerta. No se detecta la API KEY en las variables de Vercel." });
+  }
 
   try {
-    // CAMBIO TÁCTICO: Usamos v1beta y el modelo específico 'latest'
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+    // Usamos el endpoint v1 (el más estable) y el modelo base
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCliente: ${message}` }] }]
+        contents: [{ role: "user", parts: [{ text: `Actúa como el Director de INF01: ${message}` }] }]
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
+      // Este mensaje nos dirá la verdad absoluta
       return res.status(200).json({ 
-        reply: `[SISTEMA INF01]: Error de frecuencia ${data.error.code}. Verifica la API KEY en Vercel.` 
+        reply: `[SISTEMA INF01]: Error detectado. Código: ${data.error.code}. Mensaje: ${data.error.message}` 
       });
     }
 
-    if (data.candidates && data.candidates[0].content) {
+    if (data.candidates) {
       res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
     } else {
-      res.status(200).json({ reply: "[SISTEMA INF01]: Señal recibida pero sin respuesta del núcleo." });
+      res.status(200).json({ reply: "[SISTEMA INF01]: Conexión establecida, pero el núcleo no generó texto." });
     }
 
   } catch (error) {
-    res.status(500).json({ reply: "[SISTEMA INF01]: Falla crítica: " + error.message });
+    res.status(500).json({ reply: "[SISTEMA INF01]: Falla de hardware: " + error.message });
   }
 }
