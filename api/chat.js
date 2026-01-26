@@ -8,26 +8,24 @@ export default async function handler(req, res) {
   const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // Personalidad de "Inspector de Blindaje"
-  const systemPrompt = "Eres el Inspector Jefe de INF01. Tu misión es auditar y certificar la seguridad y el marketing de negocios de alto nivel. Responde con autoridad, basándote en estándares internacionales de ciberseguridad. Tu tono es serio, profesional y altamente confiable.";
+  // Personalidad de Inspector Jefe de INF01 (Estilo KITT)
+  const systemPrompt = "Eres el Inspector Jefe de INF01. Tu misión es auditar y certificar la seguridad y el marketing de negocios de alto nivel. Responde con autoridad y precisión técnica. Tu tono es profesional, audaz y protector, como un sistema de inteligencia avanzada.";
 
   try {
-    // Usamos el endpoint estable v1
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    // CAMBIO DE RUTA: Usamos v1beta y el modelo '-latest' para evitar el 404
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nConsulta del cliente: ${message}` }] }]
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nConsulta: ${message}` }] }]
       })
     });
 
     const data = await response.json();
 
-    // Diagnóstico de Error en tiempo real
     if (data.error) {
-      console.error("Error de Google:", data.error);
       return res.status(200).json({ 
-        reply: `[INSPECTOR INF01]: Alerta de conexión. Código: ${data.error.code}. Mensaje: ${data.error.message}` 
+        reply: `[SISTEMA INF01]: Error de frecuencia. Código ${data.error.code}: ${data.error.message}` 
       });
     }
 
@@ -35,10 +33,10 @@ export default async function handler(req, res) {
       const botReply = data.candidates[0].content.parts[0].text;
       res.status(200).json({ reply: botReply });
     } else {
-      res.status(200).json({ reply: "[INSPECTOR INF01]: El núcleo de IA no generó una respuesta válida. Revisa la configuración del modelo." });
+      res.status(200).json({ reply: "[SISTEMA INF01]: La señal es débil. No se pudo generar una respuesta." });
     }
 
   } catch (error) {
-    res.status(500).json({ reply: "[INSPECTOR INF01]: Falla crítica de infraestructura: " + error.message });
+    res.status(500).json({ reply: "[SISTEMA INF01]: Falla en el procesador central: " + error.message });
   }
 }
