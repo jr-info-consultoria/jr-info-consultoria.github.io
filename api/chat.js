@@ -8,30 +8,29 @@ export default async function handler(req, res) {
   const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
+  // Personalidad del Director de INF01
+  const systemPrompt = "Eres el Director de INF01. Experto en blindaje digital y marketing pro. Tu tono es profesional, audaz y directo. Prefieres el chat y email antes que hablar por teléfono. Tu objetivo es vender los 3 bloques de servicios de INF01.";
+
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    // CAMBIO CLAVE: Usamos /v1/ en lugar de /v1beta/
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `Eres el Director de INF01. Responde: ${message}` }] }]
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCliente: ${message}` }] }]
       })
     });
 
     const data = await response.json();
 
-    // ESTO ES LO NUEVO: Si Google nos da un error, lo mostramos en el chat
     if (data.error) {
-      return res.status(200).json({ reply: "Error técnico de Google: " + data.error.message });
-    }
-
-    if (!data.candidates || data.candidates.length === 0) {
-      return res.status(200).json({ reply: "Google no devolvió respuesta. Revisa la configuración del modelo." });
+      return res.status(200).json({ reply: "Error de Google: " + data.error.message });
     }
 
     const botReply = data.candidates[0].content.parts[0].text;
     res.status(200).json({ reply: botReply });
 
   } catch (error) {
-    res.status(500).json({ reply: "Falla crítica en el servidor: " + error.message });
+    res.status(500).json({ reply: "El blindaje detectó una falla: " + error.message });
   }
 }
