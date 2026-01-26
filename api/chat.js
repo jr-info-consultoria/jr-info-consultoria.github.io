@@ -8,38 +8,33 @@ export default async function handler(req, res) {
   const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey) {
-    return res.status(200).json({ reply: "[SISTEMA INF01]: Alerta. No hay API KEY cargada." });
-  }
-
   try {
-    // CAMBIO TÉCNICO: Usamos v1beta y el modelo base sin extensiones
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // CAMBIO CLAVE: Usamos 'gemini-1.5-flash-latest' que es más robusto en 2026
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `Eres el Director de INF01: ${message}` }] }]
+        contents: [{ role: "user", parts: [{ text: `Actúa como el Director de INF01, experto en blindaje digital: ${message}` }] }]
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
-      // Si falla, el Inspector nos dirá si es la llave o la dirección
       return res.status(200).json({ 
-        reply: `[INSPECTOR]: Fallo en el punto ${data.error.code}. Detalle: ${data.error.message}` 
+        reply: `[INSPECTOR INF01]: Error de frecuencia ${data.error.code}. Detalle: ${data.error.message}` 
       });
     }
 
     if (data.candidates && data.candidates[0].content) {
       res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
     } else {
-      res.status(200).json({ reply: "[INSPECTOR]: Conexión exitosa, pero el núcleo está en silencio." });
+      res.status(200).json({ reply: "[INSPECTOR INF01]: El núcleo está en silencio. Intenta de nuevo." });
     }
 
   } catch (error) {
-    res.status(500).json({ reply: "[SISTEMA INF01]: Error de hardware: " + error.message });
+    res.status(500).json({ reply: "[SISTEMA INF01]: Falla de hardware: " + error.message });
   }
 }
