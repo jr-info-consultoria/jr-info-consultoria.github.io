@@ -5,25 +5,40 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  try {
-    // Primero, le pedimos a Google que nos diga qué modelos tiene disponibles para Jose
-    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-    const listResponse = await fetch(listUrl);
-    const listData = await listResponse.json();
+  // Personalidad de "Inspector Jefe de INF01"
+  const systemPrompt = "Eres el Director de INF01. Experto en blindaje digital y marketing de alta conversión en Costa Rica. Tu misión es asesorar a profesionales como abogados y dentistas. Tu tono es audaz, seguro, profesional y directo. No saludas de forma genérica, vas al grano con autoridad.";
 
-    // Si el bot falla, nos va a mostrar esta lista en el chat para que escojamos el nombre correcto
-    if (listData.models) {
-      const modelNames = listData.models.map(m => m.name).join(", ");
+  try {
+    // CAMBIO MAESTRO: Usamos el modelo gemini-2.5-flash verificado en tu lista
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nConsulta del cliente: ${message}` }] }]
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
       return res.status(200).json({ 
-        reply: `[INSPECTOR INF01]: Conexión exitosa. Los modelos que podés usar son: ${modelNames}. Avisame cuál ves en la lista.` 
+        reply: `[SISTEMA INF01]: Error de frecuencia ${data.error.code}. Detalle: ${data.error.message}` 
       });
     }
 
-    return res.status(200).json({ reply: "[INSPECTOR INF01]: No pude recuperar la lista de modelos. Revisá tu API KEY." });
+    if (data.candidates && data.candidates[0].content) {
+      const replyText = data.candidates[0].content.parts[0].text;
+      res.status(200).json({ reply: replyText });
+    } else {
+      res.status(200).json({ reply: "[SISTEMA INF01]: Conexión exitosa, pero el núcleo no generó respuesta." });
+    }
 
   } catch (error) {
-    res.status(500).json({ reply: "[SISTEMA INF01]: Falla de hardware: " + error.message });
+    res.status(500).json({ reply: "[SISTEMA INF01]: Falla en el procesador central: " + error.message });
   }
 }
