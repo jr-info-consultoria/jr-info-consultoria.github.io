@@ -9,37 +9,37 @@ export default async function handler(req, res) {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    return res.status(200).json({ reply: "[SISTEMA INF01]: Alerta. No se detecta la API KEY en las variables de Vercel." });
+    return res.status(200).json({ reply: "[SISTEMA INF01]: Alerta. No hay API KEY cargada." });
   }
 
   try {
-    // Usamos el endpoint v1 (el más estable) y el modelo base
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // CAMBIO TÉCNICO: Usamos v1beta y el modelo base sin extensiones
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `Actúa como el Director de INF01: ${message}` }] }]
+        contents: [{ role: "user", parts: [{ text: `Eres el Director de INF01: ${message}` }] }]
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
-      // Este mensaje nos dirá la verdad absoluta
+      // Si falla, el Inspector nos dirá si es la llave o la dirección
       return res.status(200).json({ 
-        reply: `[SISTEMA INF01]: Error detectado. Código: ${data.error.code}. Mensaje: ${data.error.message}` 
+        reply: `[INSPECTOR]: Fallo en el punto ${data.error.code}. Detalle: ${data.error.message}` 
       });
     }
 
-    if (data.candidates) {
+    if (data.candidates && data.candidates[0].content) {
       res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
     } else {
-      res.status(200).json({ reply: "[SISTEMA INF01]: Conexión establecida, pero el núcleo no generó texto." });
+      res.status(200).json({ reply: "[INSPECTOR]: Conexión exitosa, pero el núcleo está en silencio." });
     }
 
   } catch (error) {
-    res.status(500).json({ reply: "[SISTEMA INF01]: Falla de hardware: " + error.message });
+    res.status(500).json({ reply: "[SISTEMA INF01]: Error de hardware: " + error.message });
   }
 }
