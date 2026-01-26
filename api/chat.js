@@ -5,34 +5,23 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const { message } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
   try {
-    // CAMBIO CLAVE: Usamos 'gemini-1.5-flash-latest' que es más robusto en 2026
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-    
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `Actúa como el Director de INF01, experto en blindaje digital: ${message}` }] }]
-      })
-    });
+    // Primero, le pedimos a Google que nos diga qué modelos tiene disponibles para Jose
+    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+    const listResponse = await fetch(listUrl);
+    const listData = await listResponse.json();
 
-    const data = await response.json();
-
-    if (data.error) {
+    // Si el bot falla, nos va a mostrar esta lista en el chat para que escojamos el nombre correcto
+    if (listData.models) {
+      const modelNames = listData.models.map(m => m.name).join(", ");
       return res.status(200).json({ 
-        reply: `[INSPECTOR INF01]: Error de frecuencia ${data.error.code}. Detalle: ${data.error.message}` 
+        reply: `[INSPECTOR INF01]: Conexión exitosa. Los modelos que podés usar son: ${modelNames}. Avisame cuál ves en la lista.` 
       });
     }
 
-    if (data.candidates && data.candidates[0].content) {
-      res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
-    } else {
-      res.status(200).json({ reply: "[INSPECTOR INF01]: El núcleo está en silencio. Intenta de nuevo." });
-    }
+    return res.status(200).json({ reply: "[INSPECTOR INF01]: No pude recuperar la lista de modelos. Revisá tu API KEY." });
 
   } catch (error) {
     res.status(500).json({ reply: "[SISTEMA INF01]: Falla de hardware: " + error.message });
