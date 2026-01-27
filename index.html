@@ -130,7 +130,7 @@
             box-shadow: 0 0 20px var(--accent);
         }
 
-        /* CHATBOT STYLES RECARNADO */
+        /* CHATBOT STYLES */
         #chat-container {
             position: fixed;
             bottom: 100px;
@@ -221,29 +221,29 @@
     </div>
 
     <section class="hero">
-        <div id="hero-tag" style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Infraestructura & Marketing</div>
+        <div id="hero-tag" style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Ciberseguridad & Marketing de Alta Conversión</div>
         
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo">
 
-        <p id="hero-text">Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.</p>
-        <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico</a>
+        <p id="hero-text">¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.</p>
+        <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
     </section>
 
     <section class="services">
         <div class="card">
             <i class="fas fa-user-shield"></i>
-            <h3 id="srv1-title">Blindaje Digital</h3>
-            <p id="srv1-text">Protección de activos y confidencialidad bajo estándares internacionales.</p>
+            <h3 id="srv1-title">Blindaje de Identidad</h3>
+            <p id="srv1-text">Eliminamos la vulnerabilidad de correos gratuitos. Migración a infraestructura corporativa cifrada y segura.</p>
         </div>
         <div class="card">
             <i class="fas fa-chart-line"></i>
-            <h3 id="srv2-title">Marketing Pro</h3>
-            <p id="srv2-text">Estrategias de conversión digital para escalar marcas a nivel global.</p>
+            <h3 id="srv2-title">Marketing de Autoridad</h3>
+            <p id="srv2-text">Estrategias de conversión diseñadas para que abogados y médicos capturen clientes de alto valor.</p>
         </div>
         <div class="card">
             <i class="fas fa-microchip"></i>
-            <h3 id="srv3-title">Agentes IA</h3>
-            <p id="srv3-text">Sistemas autónomos de atención y ventas optimizados para tu negocio.</p>
+            <h3 id="srv3-title">Agente IA 24/7</h3>
+            <p id="srv3-text">Su empleado digital que nunca duerme. Captación y filtrado de leads en tiempo real.</p>
         </div>
     </section>
 
@@ -253,53 +253,53 @@
 
     <div id="chat-container" class="chat-closed">
         <div id="chat-header">
-            <span id="bot-header-name">🤖 INF01 Assistant</span>
+            <span id="bot-header-name">🤖 Director INF01</span>
             <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
         </div>
         <div id="chat-messages"></div>
         <div id="chat-input-area">
-            <input type="text" id="user-input" placeholder="Escriba su consulta..." onkeypress="handleKey(event)">
+            <input type="text" id="user-input" placeholder="Describa su problema aquí..." onkeypress="handleKey(event)">
             <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
     <footer id="footer-copy">
-        <p>&copy; 2026 INF01 | Atención 100% Digital via Chat & Email</p>
+        <p>&copy; 2026 INF01 | Blindaje Digital para Profesionales | Costa Rica</p>
     </footer>
 
     <script>
         const texts = {
             es: {
-                heroTag: "Infraestructura & Marketing",
-                heroText: "Blindaje digital y estrategias de marketing diseñadas para el mercado global. Seguridad impenetrable, alcance sin fronteras.",
-                heroCta: "Iniciar Diagnóstico",
-                srv1Title: "Blindaje Digital",
-                srv1Text: "Protección de activos y confidencialidad bajo estándares internacionales.",
-                srv2Title: "Marketing Pro",
-                srv2Text: "Estrategias de conversión digital para escalar marcas a nivel global.",
-                srv3Title: "Agentes IA",
-                srv3Text: "Sistemas autónomos de atención y ventas optimizados para tu negocio.",
-                footer: "© 2026 INF01 | Atención 100% Digital via Chat & Email",
-                botName: "🤖 INF01 Assistant",
-                botStart: "Bienvenido a la red **INF01**. Soy su especialista de IA. ¿En qué puedo blindar su negocio hoy?",
-                placeholder: "Escriba su consulta...",
-                thinking: "Analizando perímetros..."
+                heroTag: "Ciberseguridad & Marketing de Alta Conversión",
+                heroText: "¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.",
+                heroCta: "Iniciar Diagnóstico de Blindaje",
+                srv1Title: "Blindaje de Identidad",
+                srv1Text: "Eliminamos la vulnerabilidad de correos gratuitos. Migración a infraestructura corporativa cifrada y segura.",
+                srv2Title: "Marketing de Autoridad",
+                srv2Text: "Estrategias de conversión diseñadas para que abogados y médicos capturen clientes de alto valor.",
+                srv3Title: "Agente IA 24/7",
+                srv3Text: "Su empleado digital que nunca duerme. Captación y filtrado de leads en tiempo real.",
+                footer: "© 2026 INF01 | Blindaje Digital para Profesionales | Costa Rica",
+                botName: "🤖 Director INF01",
+                botStart: "Bienvenido al Centro de Operaciones. Soy el Director de INF01. ¿Cuál es el punto de quiebre que necesita blindar en su negocio hoy?",
+                placeholder: "Describa su problema aquí...",
+                thinking: "Escaneando vulnerabilidades..."
             },
             en: {
-                heroTag: "Infrastructure & Marketing",
-                heroText: "Digital shielding and marketing strategies designed for the global market. Impenetrable security, boundless reach.",
-                heroCta: "Start Diagnosis",
-                srv1Title: "Digital Shielding",
-                srv1Text: "Asset protection and confidentiality under international standards.",
-                srv2Title: "Pro Marketing",
-                srv2Text: "Digital conversion strategies to scale brands globally.",
-                srv3Title: "AI Agents",
-                srv3Text: "Autonomous customer service and sales systems optimized for your business.",
-                footer: "© 2026 INF01 | 100% Digital Support via Chat & Email",
-                botName: "🤖 INF01 Assistant",
-                botStart: "Welcome to the **INF01** network. I am your AI specialist. How can I shield your business today?",
-                placeholder: "Type your query...",
-                thinking: "Analyzing perimeters..."
+                heroTag: "Cybersecurity & High-Conversion Marketing",
+                heroText: "Does your professional reputation depend on a @gmail account? It's time to shield your practice with the INF01 standard.",
+                heroCta: "Start Shielding Diagnosis",
+                srv1Title: "Identity Shielding",
+                srv1Text: "We eliminate the vulnerability of free email accounts. Migration to encrypted and secure corporate infrastructure.",
+                srv2Title: "Authority Marketing",
+                srv2Text: "Conversion strategies designed for lawyers and doctors to capture high-value clients.",
+                srv3Title: "24/7 AI Agent",
+                srv3Text: "Your digital employee that never sleeps. Real-time lead capture and filtering.",
+                footer: "© 2026 INF01 | Digital Shielding for Professionals | Costa Rica",
+                botName: "🤖 INF01 Director",
+                botStart: "Welcome to the Operations Center. I am the Director of INF01. What is the breaking point you need to shield in your business today?",
+                placeholder: "Describe your issue here...",
+                thinking: "Scanning vulnerabilities..."
             }
         };
 
@@ -341,36 +341,3 @@
 
         async function sendMessage() {
             const message = userInput.value.trim();
-            if (!message) return;
-
-            messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
-            userInput.value = '';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            const loadingId = "loading-" + Date.now();
-            messagesDiv.innerHTML += `<div id="${loadingId}" class="bot-msg"><b>INF01:</b> ${texts[currentLang].thinking}</div>`;
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            try {
-                // LÍNEA MODIFICADA PARA CONEXIÓN DIRECTA INTERNA
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, lang: currentLang })
-                });
-
-                const data = await response.json();
-                const loadingEl = document.getElementById(loadingId);
-                if (loadingEl) loadingEl.remove();
-                messagesDiv.innerHTML += `<div class="bot-msg">${data.reply}</div>`;
-            } catch (error) {
-                const loadingEl = document.getElementById(loadingId);
-                if (loadingEl) loadingEl.innerHTML = "Error de conexión. Protocolo de seguridad activo.";
-            }
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
-    </script>
-</body>
-</html>
