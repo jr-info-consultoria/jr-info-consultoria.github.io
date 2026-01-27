@@ -199,15 +199,19 @@
             height: 60px;
             border-radius: 50%;
             background: var(--accent);
-            color: #000;
+            color: var(--bg); /* CAMBIO: Icono en azul oscuro */
             border: none;
             cursor: pointer;
             box-shadow: 0 0 15px var(--accent);
             z-index: 1001;
-            font-size: 1.5rem;
+            font-size: 1.8rem; /* Icono más visible */
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        #chat-trigger i {
+            color: var(--bg) !important; /* Asegura el color azul oscuro */
         }
 
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.9rem; }
@@ -247,9 +251,8 @@
         </div>
     </section>
 
-    <button id="chat-trigger" onclick="toggleChat(false)">
-        <i class="fas fa-user-police"></i>
-    </button>
+    <button id="chat-trigger" onclick="toggleChat(true)">
+        <i class="fas fa-user-shield"></i> </button>
 
     <div id="chat-container" class="chat-closed">
         <div id="chat-header">
@@ -328,14 +331,14 @@
             messagesDiv.innerHTML = `<div class="bot-msg">${texts[lang].botStart}</div>`;
         }
 
-        // Lógica mejorada: detecta si venimos del botón de diagnóstico
         function toggleChat(isDiagnosis = false) {
             const isOpening = chatContainer.classList.contains('chat-closed');
             chatContainer.classList.toggle('chat-closed');
             
             if (isOpening) {
                 if (isDiagnosis) {
-                    // Si es diagnóstico, dispara la instrucción automática
+                    // Limpia la conversación para que sea una nueva instancia de diagnóstico
+                    messagesDiv.innerHTML = "";
                     sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
                 } else if (messagesDiv.innerHTML === '') {
                     messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
@@ -351,7 +354,6 @@
             const message = autoMessage || userInput.value.trim();
             if (!message) return;
 
-            // Si no es un comando de sistema, mostrar el mensaje del usuario
             if (!autoMessage) {
                 messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
                 userInput.value = '';
