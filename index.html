@@ -226,7 +226,7 @@
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo">
 
         <p id="hero-text">¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.</p>
-        <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
+        <a href="#" class="cta-btn" onclick="toggleChat(true)" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
     </section>
 
     <section class="services">
@@ -247,14 +247,14 @@
         </div>
     </section>
 
-    <button id="chat-trigger" onclick="toggleChat()">
-        <i class="fas fa-robot"></i>
+    <button id="chat-trigger" onclick="toggleChat(false)">
+        <i class="fas fa-user-police"></i>
     </button>
 
     <div id="chat-container" class="chat-closed">
         <div id="chat-header">
             <span id="bot-header-name">🤖 Director INF01</span>
-            <span onclick="toggleChat()" style="cursor:pointer">&times;</span>
+            <span onclick="toggleChat(false)" style="cursor:pointer">&times;</span>
         </div>
         <div id="chat-messages"></div>
         <div id="chat-input-area">
@@ -281,7 +281,7 @@
                 srv3Text: "Sistemas autónomos que filtran, califican y cierran prospectos por usted. Su oficina operando 24/7.",
                 footer: "© 2026 INF01 | Blindaje Digital para Profesionales | Costa Rica",
                 botName: "🤖 Director INF01",
-                botStart: "Bienvenido al Centro de Operaciones. Soy el Director de INF01. ¿Cuál es el punto de quiebre que necesita blindar en su negocio hoy?",
+                botStart: "Bienvenido al Centro de Operaciones. Soy el Director de INF01. ¿En qué puedo blindar su negocio hoy?",
                 placeholder: "Describa su problema aquí...",
                 thinking: "Escaneando vulnerabilidades..."
             },
@@ -328,10 +328,18 @@
             messagesDiv.innerHTML = `<div class="bot-msg">${texts[lang].botStart}</div>`;
         }
 
-        function toggleChat() {
+        // Lógica mejorada: detecta si venimos del botón de diagnóstico
+        function toggleChat(isDiagnosis = false) {
+            const isOpening = chatContainer.classList.contains('chat-closed');
             chatContainer.classList.toggle('chat-closed');
-            if (messagesDiv.innerHTML === '') {
-                messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
+            
+            if (isOpening) {
+                if (isDiagnosis) {
+                    // Si es diagnóstico, dispara la instrucción automática
+                    sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
+                } else if (messagesDiv.innerHTML === '') {
+                    messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
+                }
             }
         }
 
@@ -339,12 +347,16 @@
             if (e.key === 'Enter') sendMessage();
         }
 
-        async function sendMessage() {
-            const message = userInput.value.trim();
+        async function sendMessage(autoMessage = null) {
+            const message = autoMessage || userInput.value.trim();
             if (!message) return;
 
-            messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
-            userInput.value = '';
+            // Si no es un comando de sistema, mostrar el mensaje del usuario
+            if (!autoMessage) {
+                messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
+                userInput.value = '';
+            }
+            
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             const loadingId = "loading-" + Date.now();
