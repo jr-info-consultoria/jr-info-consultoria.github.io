@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INF01 | Blindaje Digital & Marketing de Élite</title>
+    
+    <title>INF01 | Blindaje Digital & Marketing de Élite en Costa Rica</title>
+    <meta name="description" content="INF01: Expertos en blindaje digital y marketing de alta conversión para profesionales en Costa Rica. Protegemos su reputación y escalamos su marca con tecnología de élite.">
+    <meta name="keywords" content="Ciberseguridad Costa Rica, Blindaje Digital, Marketing para Abogados, Marketing para Médicos, INF01, Seguridad Digital, Conversión Web, Jose Ruiz Garcia">
+    <meta name="author" content="INF01 - Director Jose Ruiz García">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://inf01.com">
+
+    <meta property="og:title" content="INF01 | Blindaje Digital & Marketing de Élite">
+    <meta property="og:description" content="¿Su reputación depende de un @gmail? Blinde su práctica profesional con el estándar INF01.">
+    <meta property="og:image" content="logo-inf01.png">
+    <meta property="og:url" content="https://inf01.com">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_CR">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -199,19 +213,19 @@
             height: 60px;
             border-radius: 50%;
             background: var(--accent);
-            color: var(--bg); /* CAMBIO: Icono en azul oscuro */
+            color: var(--bg);
             border: none;
             cursor: pointer;
             box-shadow: 0 0 15px var(--accent);
             z-index: 1001;
-            font-size: 1.8rem; /* Icono más visible */
+            font-size: 1.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         #chat-trigger i {
-            color: var(--bg) !important; /* Asegura el color azul oscuro */
+            color: var(--bg) !important;
         }
 
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.9rem; }
@@ -252,7 +266,8 @@
     </section>
 
     <button id="chat-trigger" onclick="toggleChat(true)">
-        <i class="fas fa-user-shield"></i> </button>
+        <i class="fas fa-user-shield"></i> 
+    </button>
 
     <div id="chat-container" class="chat-closed">
         <div id="chat-header">
@@ -337,7 +352,6 @@
             
             if (isOpening) {
                 if (isDiagnosis) {
-                    // Limpia la conversación para que sea una nueva instancia de diagnóstico
                     messagesDiv.innerHTML = "";
                     sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
                 } else if (messagesDiv.innerHTML === '') {
