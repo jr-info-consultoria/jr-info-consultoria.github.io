@@ -16,8 +16,8 @@ export default async function handler(req, res) {
 
     const systemPrompt = `${identity} 
     TU MISIÓN: Completar el diagnóstico INF01 en este orden:
-    1. Identificación: Nombre y Correo (Validar @).
-    2. Pregunta: Correos gratuitos.
+    1. Identificación: Solicita Nombre y Correo (Validar que el correo tenga @).
+    2. Pregunta: Uso de correos gratuitos.
     3. Pregunta: Cifrado y MFA.
     4. Pregunta: Velocidad web.
     5. Pregunta: Respaldo e IA.
@@ -47,12 +47,22 @@ export default async function handler(req, res) {
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            // --- CIRUGÍA DE DESBLOQUEO GPS ---
-            if (step === 0 && !message.includes("@")) {
-                res.status(200).json({ reply: "Para asegurar su reporte de blindaje 2026, por favor incluya un correo electrónico válido con el símbolo @." });
+            // --- CIRUGÍA DE DESBLOQUEO GPS REFINADA ---
+            const isInitTrigger = message.includes("PROTOCOL_INIT");
+            
+            if (step === 0) {
+                if (isInitTrigger) {
+                    // Si es el inicio, saludamos SIEMPRE
+                    res.status(200).json({ reply: "Bienvenido a INF01. Iniciaremos su diagnóstico de blindaje 2026. Para generar su reporte confidencial, ¿me indica su nombre y correo electrónico?" });
+                } else if (!message.includes("@")) {
+                    // Si el usuario escribe algo pero no es un correo válido
+                    res.status(200).json({ reply: "Para asegurar la entrega de su reporte de blindaje 2026, por favor incluya un nombre y un correo electrónico válido con el símbolo @." });
+                } else {
+                    // Si puso el correo pero la IA falló, pasamos a la Q1
+                    res.status(200).json({ reply: `Excelente. Iniciemos el análisis técnico: ${questions[0]}` });
+                }
             } else if (step >= 1 && step <= 5) {
-                // Si la IA falla, el código sabe qué pregunta toca sin pedir el correo
-                res.status(200).json({ reply: `Entendido. Sigamos: ${questions[step-1]}` });
+                res.status(200).json({ reply: `Entendido. Sigamos con el diagnóstico: ${questions[step-1]}` });
             } else {
                 res.status(200).json({ reply: "Diagnóstico procesado. Los datos han sido enviados al técnico informático para su evaluación gratuita vía correo electrónico. [CIERRE_AUTO]" });
             }
