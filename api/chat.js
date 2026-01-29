@@ -7,24 +7,23 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-        return res.status(500).json({ reply: "ERROR: Falta la llave de seguridad (API KEY) en el servidor." });
+        return res.status(200).json({ reply: "DEBUG: No se detecta la API KEY en Vercel." });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-
-    const systemPrompt = `Eres el AGENTE DE SEGURIDAD de INF01. Tono estoico, profesional y cortante. 
-    MÁXIMO 20 PALABRAS. 
-    PROTOCOLOS:
-    1. Si recibes 'PROTOCOL_INIT: DIAGNOSTIC_START', di: "Protocolo iniciado. Identifíquese para el reporte: ¿Nombre y Correo?".
-    2. Luego haz las 5 preguntas de diagnóstico una por una.
-    3. Al final da veredicto de RIESGO CRÍTICO y pide contactar al Director.";`
-
     try {
+        const genAI = new GoogleGenerativeAI(apiKey);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const systemPrompt = "Eres el AGENTE DE SEGURIDAD de INF01. Responde de forma estoica y corta.";
+        
         const result = await model.generateContent([systemPrompt, message]);
         const response = await result.response;
-        res.status(200).json({ reply: response.text() });
+        const text = response.text();
+
+        res.status(200).json({ reply: text });
     } catch (error) {
-        res.status(500).json({ reply: "Error de conexión con el núcleo de IA." });
+        // Esto enviará el error real al log de Vercel
+        console.error("DETALLE DEL ERROR:", error);
+        res.status(200).json({ reply: "Error de núcleo. Verifique logs en Vercel. Detalle: " + error.message });
     }
 }
