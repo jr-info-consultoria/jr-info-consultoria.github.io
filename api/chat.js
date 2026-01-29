@@ -3,24 +3,24 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // INSTRUCCIÓN MAESTRA: Personalidad, Objetivos y Hoja de Ruta.
-    const systemInstruction = `Eres el Consultor Senior de INF01. Tu tono es ejecutivo, experto y empático.
-    MÁXIMO 40 PALABRAS POR RESPUESTA.
+    // INSTRUCCIÓN MAESTRA: Identidad y Hoja de Ruta.
+    const systemInstruction = `Eres el Especialista Senior de INF01. Tu tono es profesional, experto y humano.
+    MÁXIMO 35 PALABRAS POR RESPUESTA.
     
-    TU MISIÓN: Completar este diagnóstico conversando con el cliente.
+    TU MISIÓN: Completar este diagnóstico conversando naturalmente.
     
-    HOJA DE RUTA (Síguela analizando el historial):
-    1. Identificación: Si no tienes el Nombre y Correo, pídalos profesionalmente.
-    2. Pregunta 1: Sobre el uso de correos @gmail/@hotmail profesionales.
+    HOJA DE RUTA (Analiza el historial para saber qué sigue):
+    1. Identificación: Si no tienes Nombre y Correo, pídalos profesionalmente.
+    2. Pregunta 1: Sobre el uso de correos gratuitos (@gmail/@hotmail).
     3. Pregunta 2: Sobre Cifrado y MFA (Doble Factor).
-    4. Pregunta 3: Sobre velocidad web (<2s) y conversión de ventas.
+    4. Pregunta 3: Sobre velocidad web (<2s) y ventas.
     5. Pregunta 4: Sobre protocolo legal de respaldo y recuperación.
     6. Pregunta 5: Sobre el uso de IA 24/7 para prospectos.
-    7. Cierre: Informa RIESGO CRÍTICO y que el reporte llegará a su correo pronto.
+    7. Cierre: Declara RIESGO CRÍTICO y avisa que el informe llegará a su correo.
     
-    REGLA DE ORO: Si el usuario saluda o dice algo fuera de tema, responde como un humano experto y retoma el diagnóstico con suavidad. No seas un robot de cuestionario.`;
+    REGLA DE ORO: Si el usuario dice algo corto o un saludo, responde como un humano experto y sigue con el diagnóstico. No uses códigos como 'P1'.`;
 
-    // Preparamos el flujo de mensajes
+    // Combinamos la instrucción con el historial para que la IA tenga contexto total
     const contents = history || [];
     contents.push({ role: "user", parts: [{ text: message }] });
 
@@ -30,12 +30,13 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                system_instruction: { parts: [{ text: systemInstruction }] },
                 contents: contents,
-                generationConfig: { temperature: 0.7, maxOutputTokens: 250 },
+                system_instruction: { parts: [{ text: systemInstruction }] },
+                generationConfig: { temperature: 0.7, maxOutputTokens: 200 },
+                // APAGAMOS LOS FILTROS que causan el bloqueo del disco rayado
                 safetySettings: [
-                    { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                    { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                    { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+                    { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }
                 ]
             })
         });
@@ -46,11 +47,11 @@ export default async function handler(req, res) {
             const botReply = data.candidates[0].content.parts[0].text;
             res.status(200).json({ reply: botReply });
         } else {
-            // Fallback humano por si Google se bloquea
-            res.status(200).json({ reply: "🛡️ Entiendo ese punto. Para avanzar con su blindaje profesional, ¿podría decirme si actualmente usa correos gratuitos para su negocio?" });
+            // Fallback humano por si Google tiene un hipo
+            res.status(200).json({ reply: "🛡️ Entiendo. Para seguir con el blindaje de su práctica, ¿podría confirmarme si usa correos corporativos o gratuitos?" });
         }
 
     } catch (error) {
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Jose, por favor reintente el envío." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Reintente el envío." });
     }
 }
