@@ -13,16 +13,25 @@ export default async function handler(req, res) {
 
     const step = history ? Math.floor(history.length / 2) : 0;
 
-    // IDENTIDAD: Consultor Senior INF01 - Profesional, empático y experto.
-    const identity = "Eres el Especialista Senior de INF01. Tu tono es ejecutivo, seguro y conversacional. No eres un bot; eres un experto en ciberseguridad y marketing de élite hablando con un cliente potencial.";
+    // IDENTIDAD REFORZADA: Experto, humano y con autoridad.
+    const identity = "Eres el Especialista Senior de INF01. Tu tono es ejecutivo, seguro y conversacional. Eres un experto en ciberseguridad y marketing de élite. No seas un robot; habla como un consultor de alto nivel.";
 
     let prompt = "";
     if (step === 0) {
-        prompt = `${identity} Objetivo: Iniciar el diagnóstico gratuito 2026 de forma ágil. Instrucción: Saluda brevemente, valida que la seguridad es el pilar del éxito y solicita Nombre y Correo para enviarle su reporte confidencial de riesgos al finalizar. Sé directo pero elegante. Máximo 30 palabras.`;
+        // INTRODUCCIÓN ÁGIL
+        prompt = `${identity} Objetivo: Iniciar el diagnóstico gratuito 2026. Si el usuario saluda, responde con cortesía experta y solicita su Nombre y Correo para enviarle el reporte confidencial de riesgos al finalizar. Máximo 30 palabras.`;
     } else if (step <= 5) {
-        prompt = `${identity} 1. Primero, analiza la respuesta del usuario y haz un comentario breve (máximo 10 palabras) que demuestre tu autoridad y empatía sobre el tema. 2. Luego, introduce con fluidez la pregunta número ${step}: ${questions[step-1]}. Instrucción: Que se sienta como una charla de asesoría, no como un interrogatorio. Máximo 40 palabras en total.`;
+        // RAPPORT Y PREGUNTA TÉCNICA
+        prompt = `${identity} 
+        1. Comenta la respuesta del usuario con criterio profesional (aporta un dato de valor o validación). 
+        2. Luego, introduce con fluidez la pregunta número ${step}: ${questions[step-1]}.
+        Instrucción: Que se sienta como una charla de asesoría técnica. Máximo 45 palabras.`;
     } else {
-        prompt = `${identity} Diagnóstico concluido. Informa con autoridad que has detectado brechas de RIESGO CRÍTICO que comprometen su seguridad. Dile que el "Informe de Vulnerabilidades INF01" está siendo procesado y lo recibirá en su correo electrónico a la brevedad. Menciona que el reporte incluye la hoja de ruta técnica y el contacto directo del Director para coordinar el escaneo final. Máximo 35 palabras.`;
+        // CIERRE ESTRATÉGICO
+        prompt = `${identity} 
+        Diagnóstico concluido. Informa con autoridad que has detectado brechas de RIESGO CRÍTICO. 
+        Dile que el "Informe de Vulnerabilidades INF01" está siendo procesado y lo recibirá en su correo electrónico a la brevedad. 
+        Explica que el reporte incluye la hoja de ruta y el contacto del Director para el escaneo final. Máximo 35 palabras.`;
     }
 
     try {
@@ -32,11 +41,12 @@ export default async function handler(req, res) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ parts: [{ text: prompt + "\n\nUsuario dice: " + message }] }],
-                // INYECCIÓN DE SEGURIDAD: Evita que Google bloquee términos técnicos de ciberseguridad
+                generationConfig: {
+                    temperature: 0.7, // Subimos la temperatura para que sea más natural
+                    maxOutputTokens: 200
+                },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                    { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                    { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
                     { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
                 ]
             })
@@ -44,17 +54,16 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        // VALIDACIÓN QUIRÚRGICA: Verificamos que la respuesta exista antes de enviarla
+        // VALIDACIÓN FLEXIBLE: Si hay respuesta, la damos. Si no, forzamos una respuesta humana.
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             const botReply = data.candidates[0].content.parts[0].text;
             res.status(200).json({ reply: botReply });
         } else {
-            // Si Google bloquea la respuesta o viene vacía, lanzamos un mensaje controlado
-            res.status(200).json({ reply: "🛡️ [AVISO]: Protocolo de seguridad INF01 activo. Por favor, amplíe un poco más su respuesta técnica para continuar." });
+            // Eliminamos el mensaje de "disco rayado" y ponemos uno que invite a seguir.
+            res.status(200).json({ reply: "🛡️ Entendido. Para completar su perfil de seguridad, ¿podría darme un poco más de detalle sobre ese punto o pasar a la siguiente fase?" });
         }
 
     } catch (error) {
-        // Reporte de error detallado para saber qué cable se soltó
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Detalle técnico: " + error.message });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Por favor, intente enviar su mensaje de nuevo." });
     }
 }
