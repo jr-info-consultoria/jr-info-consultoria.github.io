@@ -13,22 +13,26 @@ export default async function handler(req, res) {
 
     const step = history ? Math.floor(history.length / 2) : 0;
 
-    // INSTRUCCIÓN DE IDENTIDAD: Experto en Blindaje Digital, Ingeniería de Conversión y Agentes IA.
-    const identity = "Eres el Consultor Senior de INF01. Tu tono es profesional, experto y empático. No eres un bot de cuestionario, eres un especialista conversando con otro profesional.";
+    // IDENTIDAD: Consultor Senior INF01 - Profesional, empático y experto.
+    const identity = "Eres el Especialista Senior de INF01. Tu tono es ejecutivo, seguro y conversacional. No eres un bot; eres un experto en ciberseguridad y marketing de élite hablando con un cliente potencial.";
 
     let prompt = "";
     if (step === 0) {
-        prompt = `${identity} Objetivo: Iniciar el diagnóstico gratuito. Valida la importancia de la seguridad y pide amablemente su Nombre Completo y Correo para enviarle el reporte final.`;
+        // INTRODUCCIÓN BREVE Y EFECTIVA
+        prompt = `${identity} 
+        Objetivo: Iniciar el diagnóstico gratuito 2026 de forma ágil. 
+        Instrucción: Saluda brevemente, valida que la seguridad es el pilar del éxito y solicita Nombre y Correo para enviarle su reporte confidencial de riesgos al finalizar. Sé directo pero elegante. Máximo 30 palabras.`;
     } else if (step <= 5) {
-        // Aquí le pedimos a la IA que ANALICE la respuesta anterior antes de lanzar la siguiente pregunta.
+        // LÓGICA CONVERSACIONAL: COMENTAR + PREGUNTAR
         prompt = `${identity} 
-        1. Primero, comenta brevemente de forma profesional y experta sobre lo que el usuario acaba de responder (aporta valor).
-        2. Luego, introduce con naturalidad y haz la pregunta número ${step}: ${questions[step-1]}.
-        No uses códigos como 'P1', que se sienta como una transición fluida entre expertos. Máximo 35 palabras.`;
+        1. Primero, analiza la respuesta del usuario y haz un comentario breve (máximo 10 palabras) que demuestre tu autoridad y empatía sobre el tema. 
+        2. Luego, introduce con fluidez la pregunta número ${step}: ${questions[step-1]}.
+        Instrucción: Que se sienta como una charla de asesoría, no como un interrogatorio. Máximo 40 palabras en total.`;
     } else {
+        // CIERRE DE ALTA AUTORIDAD
         prompt = `${identity} 
-        Diagnóstico concluido. Basado en las respuestas, confirma que has detectado vulnerabilidades que ponen en RIESGO CRÍTICO su reputación. 
-        Dile que el reporte detallado está listo y que debe contactar al Director Jose Ruiz García por WhatsApp para el escaneo final de blindaje.`;
+        Diagnóstico concluido. Basado en sus respuestas, confirma con firmeza que has detectado brechas de RIESGO CRÍTICO para su marca. 
+        Dile que el reporte de blindaje está listo y que debe contactar al Director Jose Ruiz García por WhatsApp para coordinar el escaneo técnico final inmediatamente.`;
     }
 
     try {
