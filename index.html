@@ -379,7 +379,6 @@
             
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Creamos un ID único para el mensaje de respuesta y lo insertamos como 'pensando'
             const msgId = "msg-" + Date.now();
             messagesDiv.innerHTML += `<div id="${msgId}" class="bot-msg"><b>INF01:</b> ${texts[currentLang].thinking}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -397,11 +396,21 @@
                 const data = await response.json();
                 const msgEl = document.getElementById(msgId);
                 
-                // Aplicamos la respuesta de un solo golpe para evitar fragmentación visual
-                if (msgEl) msgEl.innerHTML = data.reply;
+                // Limpiamos la respuesta del código de sistema antes de mostrarla
+                const cleanReply = data.reply.replace('[SISTEMA_CIERRE]', '');
+                
+                if (msgEl) msgEl.innerHTML = cleanReply;
                 
                 chatHistory.push({ role: "user", parts: [{ text: message }] });
-                chatHistory.push({ role: "model", parts: [{ text: data.reply }] });
+                chatHistory.push({ role: "model", parts: [{ text: cleanReply }] });
+
+                // LOGICA DE CIERRE AUTOMÁTICO
+                if (data.reply.includes('[SISTEMA_CIERRE]')) {
+                    setTimeout(() => {
+                        // Avisar al usuario justo antes de cerrar si se desea, o cerrar directo
+                        toggleChat(false); 
+                    }, 6000); // 6 segundos de cortesía para que el usuario lea el mensaje final
+                }
 
             } catch (error) {
                 const msgEl = document.getElementById(msgId);
