@@ -4,17 +4,28 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey) {
-        return res.status(200).json({ reply: "🛡️ [ERROR]: La API KEY no está configurada en Vercel." });
-    }
+    if (!apiKey) return res.status(200).json({ reply: "🛡️ [ERROR]: API KEY no detectada." });
 
-    const systemText = `Eres el Asesor Técnico & Ventas de INF01. Tono: Ejecutivo y serio.
-    MISIÓN: Mostrar el costo de oportunidad de no tener blindaje digital.
-    PILARES: 1. Blindaje de correos. 2. Ingeniería Web. 3. Agentes de IA.
-    REGLA: Máximo 40 palabras. No inventes datos. Si hay interés real usa: [INVITAR_CITA]`;
+    // EL GUION DE ALTO IMPACTO (Serio, Persuasivo y Real)
+    const systemText = `Eres el Asesor Técnico & Ventas de INF01. 
+    Tono: Ejecutivo, audaz y sumamente seguro. 
+    
+    TU FILOSOFÍA: No vendes por necesidad, vendes por estándar. 
+    Dile al profesional que operar bajo esquemas vulnerables (@gmail, webs lentas) no solo es un riesgo técnico, es una falta de respeto a su propia marca profesional.
+    
+    PILARES DE INF01:
+    1. Blindaje Digital: Infraestructura corporativa cifrada (Adiós a la vulnerabilidad de @gmail).
+    2. Ingeniería de Conversión: Webs de élite diseñadas para captar clientes, no solo para "estar en internet".
+    3. Agentes de IA: Tu oficina operando 24/7 mientras tú descansas.
+
+    REGLAS DE ORO:
+    - Máximo 40 palabras.
+    - Sé directo: "Su prestigio actual merece una infraestructura que lo proteja".
+    - Si el cliente muestra interés real, usa: [INVITAR_CITA]`;
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // CAMBIO QUIRÚRGICO: Usamos la versión estable 'v1'
+        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         
         const response = await fetch(url, {
             method: 'POST',
@@ -22,26 +33,23 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 system_instruction: { parts: [{ text: systemText }] },
                 contents: (history || []).concat([{ role: "user", parts: [{ text: message }] }]),
-                generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+                generationConfig: { temperature: 0.6, maxOutputTokens: 350 }
             })
         });
 
         const data = await response.json();
 
-        // Si Google nos devuelve un error específico, lo mostramos para saber qué pasa
         if (data.error) {
             return res.status(200).json({ reply: `🛡️ [API ERROR]: ${data.error.message}` });
         }
 
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-            const botReply = data.candidates[0].content.parts[0].text;
-            res.status(200).json({ reply: botReply });
+            res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            res.status(200).json({ reply: "Entiendo su consulta. En INF01 protegemos su prestigio profesional con tecnología de élite. ¿Qué área le gustaría optimizar hoy?" });
+            res.status(200).json({ reply: "En INF01 no solo blindamos datos, blindamos reputaciones. ¿Hablamos de su infraestructura actual?" });
         }
 
     } catch (error) {
-        // Este es el último recurso si todo falla
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Error de conexión interna. Jose, por favor revisa que el archivo se llame sales.js y esté en /api." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Reintentando conexión estratégica..." });
     }
 }
