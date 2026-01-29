@@ -3,18 +3,16 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // HOJA DE RUTA CON VALIDACIÓN DE DATOS
     const systemPrompt = `Eres el Especialista Senior de INF01. Tono profesional y experto.
     MÁXIMO 35 PALABRAS POR RESPUESTA.
     
-    TU MISIÓN: Completar el diagnóstico INF01 siguiendo este orden estricto:
-    1. Identificación: Solicita Nombre y Correo. 
-       REGLA CRÍTICA: Si el usuario no proporciona un correo con "@", NO AVANCES. Pide amablemente que corrija el correo para asegurar la entrega del reporte.
+    TU MISIÓN: Completar el diagnóstico INF01 en este orden:
+    1. Identificación: Solicita Nombre y Correo. No avances si el correo no tiene "@".
     2. Pregunta: Uso de correos gratuitos (@gmail).
     3. Pregunta: Cifrado y MFA (Doble Factor).
     4. Pregunta: Velocidad web y conversión.
     5. Pregunta: Protocolo legal de respaldo e IA.
-    6. CIERRE: "Ya tenemos los datos. Serán enviados al técnico informático quien le contactará vía correo para el diagnóstico completo SIN COSTO adicional."
+    6. CIERRE: Confirma que el técnico informático contactará al usuario para el diagnóstico completo SIN COSTO adicional.
     
     Al finalizar el punto 6, añade SIEMPRE: [CIERRE_AUTO]`;
 
@@ -43,11 +41,15 @@ export default async function handler(req, res) {
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            // FALLBACK INTELIGENTE SI EL CEREBRO TIENE UN HIPO
-            const fallback = isStart 
-                ? "Bienvenido a INF01. Para su reporte confidencial de blindaje 2026, ¿me indica su nombre y correo electrónico válido?" 
-                : "Para continuar, asegúrese de ingresar un correo electrónico válido (con @) para que nuestro sistema pueda procesar su diagnóstico.";
-            res.status(200).json({ reply: fallback });
+            // --- CIRUGÍA DE DESBLOQUEO: Si la IA falla pero hay un correo, forzamos el avance ---
+            if (message.includes("@")) {
+                res.status(200).json({ reply: "Excelente, correo registrado. Iniciemos el análisis técnico: ¿Utiliza actualmente correos gratuitos como @gmail o @hotmail para su práctica profesional?" });
+            } else {
+                const fallback = isStart 
+                    ? "Bienvenido a INF01. Para su reporte confidencial 2026, ¿me indica su nombre y correo electrónico válido?" 
+                    : "Para continuar, asegúrese de ingresar un correo electrónico válido (con @) para que nuestro sistema pueda procesar su diagnóstico.";
+                res.status(200).json({ reply: fallback });
+            }
         }
     } catch (error) {
         res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Jose, reintente el envío." });
