@@ -267,7 +267,7 @@
         </div>
     </section>
 
-    <button id="chat-trigger" onclick="toggleChat(true)">
+    <button id="chat-trigger" onclick="toggleChat(false)">
         <i class="fas fa-user-shield"></i> 
     </button>
 
@@ -301,7 +301,7 @@
                 srv3Text: "Sistemas autónomos que filtran, califican y cierran prospectos por usted. Su oficina operando 24/7.",
                 footer: "© 2026 INF01 | Blindaje Digital para Profesionales | Costa Rica",
                 botName: "🤖 Director INF01",
-                botStart: "Bienvenido al Centro de Operaciones. Soy el Director de INF01. ¿En qué puedo blindar su negocio hoy?",
+                botStart: "Bienvenido al Centro de Operaciones. Soy el Director de INF01. ¿Cuál es el punto de quiebre que necesita blindar hoy?",
                 placeholder: "Describa su problema aquí...",
                 thinking: "Escaneando vulnerabilidades..."
             },
@@ -353,10 +353,10 @@
             chatContainer.classList.toggle('chat-closed');
             
             if (isOpening) {
+                messagesDiv.innerHTML = ""; // Limpia siempre al abrir para iniciar fresco
                 if (isDiagnosis) {
-                    messagesDiv.innerHTML = "";
                     sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
-                } else if (messagesDiv.innerHTML === '') {
+                } else {
                     messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
                 }
             }
