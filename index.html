@@ -396,20 +396,20 @@
                 const data = await response.json();
                 const msgEl = document.getElementById(msgId);
                 
-                // Limpiamos la respuesta del código de sistema antes de mostrarla
-                const cleanReply = data.reply.replace('[SISTEMA_CIERRE]', '');
+                // Limpiamos la respuesta de la etiqueta de cierre antes de mostrarla
+                const cleanReply = data.reply.replace('[CIERRE_SISTEMA]', '').trim();
                 
                 if (msgEl) msgEl.innerHTML = cleanReply;
                 
+                // Actualizamos historial con la respuesta limpia
                 chatHistory.push({ role: "user", parts: [{ text: message }] });
                 chatHistory.push({ role: "model", parts: [{ text: cleanReply }] });
 
-                // LOGICA DE CIERRE AUTOMÁTICO
-                if (data.reply.includes('[SISTEMA_CIERRE]')) {
+                // LÓGICA DE CIERRE AUTOMÁTICO DE ELITE
+                if (data.reply.includes('[CIERRE_SISTEMA]')) {
                     setTimeout(() => {
-                        // Avisar al usuario justo antes de cerrar si se desea, o cerrar directo
                         toggleChat(false); 
-                    }, 6000); // 6 segundos de cortesía para que el usuario lea el mensaje final
+                    }, 8000); // 8 segundos de cortesía para lectura final
                 }
 
             } catch (error) {
