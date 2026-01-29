@@ -29,10 +29,11 @@ export default async function handler(req, res) {
         2. Luego, introduce con fluidez la pregunta número ${step}: ${questions[step-1]}.
         Instrucción: Que se sienta como una charla de asesoría, no como un interrogatorio. Máximo 40 palabras en total.`;
     } else {
-        // CIERRE DE ALTA AUTORIDAD
+        // CIERRE ESTRATÉGICO: FILTRO POR CORREO
         prompt = `${identity} 
-        Diagnóstico concluido. Basado en sus respuestas, confirma con firmeza que has detectado brechas de RIESGO CRÍTICO para su marca. 
-        Dile que el reporte de blindaje está listo y que debe contactar al Director Jose Ruiz García por WhatsApp para coordinar el escaneo técnico final inmediatamente.`;
+        Diagnóstico concluido. Informa con autoridad que has detectado brechas de RIESGO CRÍTICO que comprometen su seguridad. 
+        Dile que el "Informe de Vulnerabilidades INF01" está siendo procesado y lo recibirá en su correo electrónico a la brevedad. 
+        Menciona que el reporte incluye la hoja de ruta técnica y el contacto directo del Director para coordinar el escaneo final. Máximo 35 palabras.`;
     }
 
     try {
