@@ -1,60 +1,37 @@
+// api/chat.js - El Cerebro del Inspector INF01
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
+    const { message, lang } = req.body;
 
-  const { message } = req.body;
-  const apiKey = process.env.GEMINI_API_KEY;
-
-  // --- ENTRENAMIENTO AVANZADO DEL DIRECTOR DE INF01 ---
-  const systemPrompt = `
-    Eres el Director de INF01, el socio estratégico de Jose. Tu misión es vender los 3 módulos de servicios a profesionales (Abogados, Dentistas, Inmobiliarias, etc.).
+    // INSTRUCCIÓN MAESTRA (LO QUE APRENDIÓ EN LA ESCUELA)
+    const systemPrompt = `
+    Eres el INSPECTOR DE SEGURIDAD de INF01. Tu tono es estoico, profesional y cortante.
+    MÁXIMO 20 PALABRAS POR RESPUESTA.
     
-    TU PERSONALIDAD:
-    - Eres un Inspector de élite: Audaz, directo, seguro y muy profesional. 
-    - No pierdes el tiempo con charlas vacías. Vas al grano.
-    - Tu tono es protector pero firme. Quieres que el cliente tenga éxito, pero le haces ver sus debilidades digitales.
+    PROTOCOLO OBLIGATORIO:
+    1. Si el usuario dice "PROTOCOL_INIT", di: "Protocolo INF01 iniciado. Identifíquese para el reporte: ¿Nombre y Correo profesional?".
+    2. No avances hasta que el usuario dé su nombre y correo.
+    3. Una vez identificado, realiza estas 5 preguntas UNA POR UNA:
+       - 1. ¿Usa @gmail o @hotmail para su comunicación oficial?
+       - 2. ¿Tiene Cifrado Empresarial y MFA activo?
+       - 3. ¿Su web carga en menos de 2 segundos y vende?
+       - 4. ¿Tiene plan legal de Respaldo de Datos?
+       - 5. ¿Usa IA 24/7 para filtrar prospectos?
+    4. Tras la respuesta 5, da el VEREDICTO: "Riesgo Crítico detectado. He notificado al Director. Contacte vía WhatsApp para el blindaje o escriba a blindaje@inf01.com".
+    `;
 
-    TUS SERVICIOS (LOS 3 MÓDULOS):
-    1. BLINDAJE DIGITAL: Seguridad extrema para datos y correos corporativos. Eliminamos el uso de correos @gmail/hotmail en empresas serias. Implementamos cifrado y protección de identidad.
-    2. WEB GLOBAL: Sitios web de alto impacto, rápidos y optimizados para el mercado internacional (EE.UU./Europa). Diseño que proyecta autoridad.
-    3. AGENTE IA 24/7: Empleados digitales (como tú) que atienden, filtran y venden a los clientes a cualquier hora, en cualquier idioma.
+    try {
+        // Aquí conectamos con Gemini (usando tu API KEY configurada en Vercel)
+        // Por ahora, simulamos la respuesta para que veas la lógica:
+        let reply = "Entendido. Proceda con el protocolo."; 
+        
+        // Aquí iría la llamada real a la API de Google Gemini
+        // const response = await callGemini(systemPrompt, message);
+        // reply = response.text;
 
-    TUS REGLAS DE ORO:
-    - Si el cliente es vago en su respuesta, exige detalles: "¿A qué se dedica su práctica exactamente?".
-    - Siempre enfatiza el riesgo: "Un bufete con Gmail es un blanco fácil para el cibercrimen".
-    - OBJETIVO FINAL: Lograr que el cliente proporcione su correo o número de contacto para que Jose le envíe un diagnóstico de blindaje personalizado.
-  `;
-
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCliente dice: ${message}` }] }]
-      })
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      return res.status(200).json({ 
-        reply: `[SISTEMA INF01]: Error de frecuencia ${data.error.code}. Detalle: ${data.error.message}` 
-      });
+        res.status(200).json({ reply: reply });
+    } catch (error) {
+        res.status(500).json({ reply: "Error de conexión. Protocolo de seguridad activo." });
     }
-
-    if (data.candidates && data.candidates[0].content) {
-      const replyText = data.candidates[0].content.parts[0].text;
-      res.status(200).json({ reply: replyText });
-    } else {
-      res.status(200).json({ reply: "[SISTEMA INF01]: Conexión exitosa, pero el núcleo no generó respuesta." });
-    }
-
-  } catch (error) {
-    res.status(500).json({ reply: "[SISTEMA INF01]: Falla en el procesador central: " + error.message });
-  }
 }
