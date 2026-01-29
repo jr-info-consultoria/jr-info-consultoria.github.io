@@ -4,23 +4,31 @@ export default async function handler(req, res) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     const questions = [
-        "¿Utiliza correos gratuitos (@gmail/@hotmail) para su práctica profesional?",
-        "¿Tiene implementado Cifrado y MFA (Doble Factor) en todos sus accesos?",
-        "¿Su sitio web carga en menos de 2 segundos y está optimizado para ventas?",
-        "¿Cuenta con un protocolo legal de respaldo y recuperación ante desastres?",
-        "¿Utiliza Agentes de IA 24/7 para calificar prospectos y cerrar citas?"
+        "¿Utiliza actualmente correos gratuitos como @gmail o @hotmail para su práctica profesional?",
+        "¿Cuenta con sistemas de Cifrado y MFA (Autenticación de Doble Factor) activos en sus accesos críticos?",
+        "¿Su sitio web actual carga en menos de 2 segundos y está diseñado para convertir visitantes en clientes?",
+        "¿Tiene un protocolo legal y técnico de respaldo para recuperar sus datos ante un posible ataque?",
+        "¿Implementa Agentes de IA 24/7 que filtren y califiquen a sus prospectos automáticamente?"
     ];
 
-    // Contamos cuántas interacciones reales han ocurrido para saber qué pregunta toca
     const step = history ? Math.floor(history.length / 2) : 0;
+
+    // INSTRUCCIÓN DE IDENTIDAD: Experto en Blindaje Digital, Ingeniería de Conversión y Agentes IA.
+    const identity = "Eres el Consultor Senior de INF01. Tu tono es profesional, experto y empático. No eres un bot de cuestionario, eres un especialista conversando con otro profesional.";
 
     let prompt = "";
     if (step === 0) {
-        prompt = "Eres el Agente de Seguridad INF01. Protocolo: Pide Nombre y Correo de forma estoica. Máximo 15 palabras.";
+        prompt = `${identity} Objetivo: Iniciar el diagnóstico gratuito. Valida la importancia de la seguridad y pide amablemente su Nombre Completo y Correo para enviarle el reporte final.`;
     } else if (step <= 5) {
-        prompt = `Eres el Agente de Seguridad INF01. El usuario ya se identificó. Haz ÚNICAMENTE la pregunta número ${step}: ${questions[step-1]}. No saludes, ve directo al punto. Máximo 20 palabras.`;
+        // Aquí le pedimos a la IA que ANALICE la respuesta anterior antes de lanzar la siguiente pregunta.
+        prompt = `${identity} 
+        1. Primero, comenta brevemente de forma profesional y experta sobre lo que el usuario acaba de responder (aporta valor).
+        2. Luego, introduce con naturalidad y haz la pregunta número ${step}: ${questions[step-1]}.
+        No uses códigos como 'P1', que se sienta como una transición fluida entre expertos. Máximo 35 palabras.`;
     } else {
-        prompt = "Eres el Agente de Seguridad INF01. Diagnóstico terminado. Declara RIESGO CRÍTICO por vulnerabilidades detectadas y ordena contactar al Director por WhatsApp. Máximo 20 palabras.";
+        prompt = `${identity} 
+        Diagnóstico concluido. Basado en las respuestas, confirma que has detectado vulnerabilidades que ponen en RIESGO CRÍTICO su reputación. 
+        Dile que el reporte detallado está listo y que debe contactar al Director Jose Ruiz García por WhatsApp para el escaneo final de blindaje.`;
     }
 
     try {
@@ -37,6 +45,6 @@ export default async function handler(req, res) {
         const botReply = data.candidates[0].content.parts[0].text;
         res.status(200).json({ reply: botReply });
     } catch (error) {
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Error de enlace. Reintente." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace de seguridad temporalmente inestable. Reintente." });
     }
 }
