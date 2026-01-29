@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-    // MENSAJE DE MANTENIMIENTO DE ÉLITE
-    const maintenanceMessage = "Bienvenido a INF01. En este momento, nuestra Dirección Estratégica está realizando una actualización de seguridad en los protocolos del Asesor IA para garantizar nuestro estándar de élite. Estaremos operativos nuevamente en 3 horas. Gracias por su comprensión.";
+    // Respuesta directa sin pasar por Google para evitar errores
+    const mensajeMantenimiento = "Hola, bienvenido a nuestro departamento de asesoría y ventas. En este momento no le puedo atender debido a actualizaciones en mi memoria estratégica para brindarle un mejor servicio. Estaré disponible tan pronto como sea posible. Saludos cordiales y gracias por preferirnos.";
     
-    res.status(200).json({ reply: maintenanceMessage });
+    res.status(200).json({ reply: mensajeMantenimiento });
 }
