@@ -268,7 +268,7 @@
     </section>
 
     <button id="chat-trigger" onclick="toggleChat(false)">
-        <i class="fas fa-user-shield"></i> 
+        <i class="fas fa-briefcase"></i> 
     </button>
 
     <div id="chat-container" class="chat-closed">
@@ -301,9 +301,12 @@
                 srv3Text: "Sistemas autónomos que filtran, califican y cierran prospectos por usted. Su oficina operando 24/7.",
                 footer: "© 2026 INF01 | Blindaje Digital para Profesionales | Costa Rica",
                 botName: "🛡️ Agente de Seguridad INF01",
+                botNameSales: "💼 Asesor Técnico & Ventas",
                 botStart: "Protocolo de Seguridad iniciado. Soy el Agente INF01. ¿Cuál es el punto de quiebre que necesita blindar hoy?",
+                botStartSales: "Bienvenido a la Dirección Estratégica de INF01. Soy su Asesor Técnico. ¿Hablamos de cómo blindar su prestigio y optimizar su conversión hoy?",
                 placeholder: "Describa su problema aquí...",
-                thinking: "Escaneando vulnerabilidades..."
+                thinking: "Escaneando vulnerabilidades...",
+                thinkingSales: "Consultando con la Dirección..."
             },
             en: {
                 heroTag: "Cybersecurity & High-Conversion Marketing",
@@ -317,14 +320,18 @@
                 srv3Text: "Autonomous systems that filter, qualify, and close leads for you. Your office operating 24/7.",
                 footer: "© 2026 INF01 | Digital Shielding for Professionals | Costa Rica",
                 botName: "🛡️ INF01 Security Agent",
+                botNameSales: "💼 Tech & Sales Consultant",
                 botStart: "Security Protocol initiated. I am the INF01 Agent. What is the breaking point you need to shield in your business today?",
+                botStartSales: "Welcome to INF01 Strategy Hub. I am your Technical Advisor. Shall we discuss how to shield your prestige and optimize conversion today?",
                 placeholder: "Describe your issue here...",
-                thinking: "Scanning vulnerabilities..."
+                thinking: "Scanning vulnerabilities...",
+                thinkingSales: "Consulting Management..."
             }
         };
 
         let currentLang = 'es';
         let chatHistory = []; 
+        let currentBot = 'sales'; // Controla el flujo hacia /api/chat o /api/sales
         const chatContainer = document.getElementById('chat-container');
         const messagesDiv = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
@@ -343,10 +350,14 @@
             document.getElementById('srv3-title').innerText = texts[lang].srv3Title;
             document.getElementById('srv3-text').innerText = texts[lang].srv3Text;
             document.getElementById('footer-copy').innerHTML = `<p>${texts[lang].footer}</p>`;
-            document.getElementById('bot-header-name').innerText = texts[lang].botName;
+            
+            // Actualizar nombre según el bot activo
+            document.getElementById('bot-header-name').innerText = (currentBot === 'security') ? texts[lang].botName : texts[lang].botNameSales;
+            
             userInput.placeholder = texts[lang].placeholder;
             
-            messagesDiv.innerHTML = `<div class="bot-msg">${texts[lang].botStart}</div>`;
+            const startMsg = (currentBot === 'security') ? texts[lang].botStart : texts[lang].botStartSales;
+            messagesDiv.innerHTML = `<div class="bot-msg">${startMsg}</div>`;
         }
 
         function toggleChat(isDiagnosis = false) {
@@ -357,9 +368,13 @@
                 messagesDiv.innerHTML = ""; 
                 chatHistory = []; 
                 if (isDiagnosis) {
+                    currentBot = 'security';
+                    document.getElementById('bot-header-name').innerText = texts[currentLang].botName;
                     sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
                 } else {
-                    messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
+                    currentBot = 'sales';
+                    document.getElementById('bot-header-name').innerText = texts[currentLang].botNameSales;
+                    messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStartSales}</div>`;
                 }
             }
         }
@@ -380,11 +395,16 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             const msgId = "msg-" + Date.now();
-            messagesDiv.innerHTML += `<div id="${msgId}" class="bot-msg"><b>INF01:</b> ${texts[currentLang].thinking}</div>`;
+            const thinkingText = (currentBot === 'security') ? texts[currentLang].thinking : texts[currentLang].thinkingSales;
+            
+            messagesDiv.innerHTML += `<div id="${msgId}" class="bot-msg"><b>INF01:</b> ${thinkingText}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
+            // Ruteo dinámico basado en el bot activo o el comando de inicio
+            const endpoint = (message.includes("PROTOCOL_INIT") || currentBot === 'security') ? '/api/chat' : '/api/sales';
+
             try {
-                const response = await fetch('/api/chat', {
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -396,23 +416,28 @@
                 const data = await response.json();
                 const msgEl = document.getElementById(msgId);
                 
-                // --- CIRUGÍA DE CIERRE AUTOMÁTICO ---
-                // Limpiamos la etiqueta de cierre de la vista del usuario
-                const cleanReply = data.reply.replace('[CIERRE_AUTO]', '').trim();
+                // Limpieza de etiquetas de control
+                const cleanReply = data.reply.replace('[CIERRE_AUTO]', '').replace('[INVITAR_CITA]', '').trim();
                 
                 if (msgEl) msgEl.innerHTML = cleanReply;
                 
                 chatHistory.push({ role: "user", parts: [{ text: message }] });
                 chatHistory.push({ role: "model", parts: [{ text: cleanReply }] });
 
-                // Detectamos la señal de cierre para apagar la ventana automáticamente
+                // Lógica de Cierre (Bot de Seguridad)
                 if (data.reply.includes('[CIERRE_AUTO]')) {
                     setTimeout(() => {
-                        // Cerramos físicamente la interfaz del chat
                         chatContainer.classList.add('chat-closed');
-                        // Opcional: Limpiamos historial para la siguiente sesión
                         chatHistory = [];
-                    }, 6000); // 6 segundos para permitir la lectura final del diagnóstico
+                    }, 8000);
+                }
+
+                // Lógica de Invitación a Cita (Bot de Ventas)
+                if (data.reply.includes('[INVITAR_CITA]')) {
+                    setTimeout(() => {
+                        messagesDiv.innerHTML += `<div class="bot-msg" style="border-left: 3px solid #ff9f43; background: rgba(255,159,67,0.05);"><b>Nota:</b> ¿Desea que agendemos una sesión estratégica directa con nuestro Director para auditar su caso?</div>`;
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    }, 1000);
                 }
 
             } catch (error) {
@@ -422,7 +447,8 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStart}</div>`;
+        // Carga inicial
+        messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStartSales}</div>`;
     </script>
 </body>
 </html>
