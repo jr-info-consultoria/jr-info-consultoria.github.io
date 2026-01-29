@@ -11,20 +11,32 @@ export default async function handler(req, res) {
         "¿Implementa Agentes de IA 24/7 que filtren y califiquen a sus prospectos automáticamente?"
     ];
 
+    const isInitTrigger = message.includes("PROTOCOL_INIT");
     const step = history ? Math.floor(history.length / 2) : 0;
+    
+    // 🛡️ CIRUGÍA 1: VALIDACIÓN DE HIERRO (Fuera de la IA)
+    // Buscamos si ya existe un correo con @ en el historial o en el mensaje actual
+    const hasEmailProvided = (history && history.some(h => h.parts[0].text.includes("@"))) || message.includes("@");
+
+    // Si no es el inicio y no tenemos un correo válido aún, bloqueamos el avance
+    if (!isInitTrigger && !hasEmailProvided) {
+        return res.status(200).json({ 
+            reply: "Para asegurar la entrega de su reporte de blindaje 2026, por favor incluya un nombre y un correo electrónico válido con el símbolo @." 
+        });
+    }
+
+    // 🛡️ CIRUGÍA 2: SEGURO DE CIERRE (Evita el reciclaje)
+    const alreadyClosed = history && history.some(h => h.parts[0].text.includes("[CIERRE_AUTO]"));
+    if (alreadyClosed) {
+        return res.status(200).json({ reply: "Su sesión de diagnóstico ha concluido con éxito. El técnico informático ya ha recibido su solicitud. [CIERRE_AUTO]" });
+    }
+
     const identity = "Eres el Especialista Senior de INF01. Tono profesional y experto. Máximo 35 palabras.";
-
     const systemPrompt = `${identity} 
-    TU MISIÓN: Completar el diagnóstico INF01 en este orden:
-    1. Identificación: Solicita Nombre y Correo (Validar que el correo tenga @).
-    2. Pregunta: Uso de correos gratuitos.
-    3. Pregunta: Cifrado y MFA.
-    4. Pregunta: Velocidad web.
-    5. Pregunta: Respaldo e IA.
-    6. CIERRE: Datos enviados al técnico. Contacto vía correo SIN COSTO. [CIERRE_AUTO]`;
-
-    const contents = history || [];
-    contents.push({ role: "user", parts: [{ text: message }] });
+    TU MISIÓN: Completar el diagnóstico INF01.
+    1. Identificación: Ya validamos el correo. Saluda y agradece los datos.
+    2. Preguntas técnicas: Haz una a la vez según el historial.
+    3. Cierre: Informa que los datos van al técnico informático para el diagnóstico SIN COSTO. Termina con [CIERRE_AUTO]`;
 
     try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
@@ -33,7 +45,7 @@ export default async function handler(req, res) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 system_instruction: { parts: [{ text: systemPrompt }] },
-                contents: contents,
+                contents: (history || []).concat([{ role: "user", parts: [{ text: message }] }]),
                 generationConfig: { temperature: 0.7, maxOutputTokens: 250 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
@@ -47,25 +59,9 @@ export default async function handler(req, res) {
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            // --- CIRUGÍA DE DESBLOQUEO GPS REFINADA ---
-            const isInitTrigger = message.includes("PROTOCOL_INIT");
-            
-            if (step === 0) {
-                if (isInitTrigger) {
-                    // Si es el inicio, saludamos SIEMPRE
-                    res.status(200).json({ reply: "Bienvenido a INF01. Iniciaremos su diagnóstico de blindaje 2026. Para generar su reporte confidencial, ¿me indica su nombre y correo electrónico?" });
-                } else if (!message.includes("@")) {
-                    // Si el usuario escribe algo pero no es un correo válido
-                    res.status(200).json({ reply: "Para asegurar la entrega de su reporte de blindaje 2026, por favor incluya un nombre y un correo electrónico válido con el símbolo @." });
-                } else {
-                    // Si puso el correo pero la IA falló, pasamos a la Q1
-                    res.status(200).json({ reply: `Excelente. Iniciemos el análisis técnico: ${questions[0]}` });
-                }
-            } else if (step >= 1 && step <= 5) {
-                res.status(200).json({ reply: `Entendido. Sigamos con el diagnóstico: ${questions[step-1]}` });
-            } else {
-                res.status(200).json({ reply: "Diagnóstico procesado. Los datos han sido enviados al técnico informático para su evaluación gratuita vía correo electrónico. [CIERRE_AUTO]" });
-            }
+            // Fallback dinámico por si falla la IA
+            const fallback = step >= 1 && step <= 5 ? `Entendido. Sigamos: ${questions[step-1]}` : "Bienvenido a INF01. Para iniciar su blindaje, ¿me indica su nombre y correo?";
+            res.status(200).json({ reply: fallback });
         }
     } catch (error) {
         res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Reintente el envío." });
