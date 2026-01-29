@@ -1,37 +1,29 @@
-// api/chat.js - El Cerebro del Inspector INF01
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
-    const { message, lang } = req.body;
+    const { message } = req.body;
 
-    // INSTRUCCIÓN MAESTRA (LO QUE APRENDIÓ EN LA ESCUELA)
-    const systemPrompt = `
-    Eres el INSPECTOR DE SEGURIDAD de INF01. Tu tono es estoico, profesional y cortante.
-    MÁXIMO 20 PALABRAS POR RESPUESTA.
-    
-    PROTOCOLO OBLIGATORIO:
-    1. Si el usuario dice "PROTOCOL_INIT", di: "Protocolo INF01 iniciado. Identifíquese para el reporte: ¿Nombre y Correo profesional?".
-    2. No avances hasta que el usuario dé su nombre y correo.
-    3. Una vez identificado, realiza estas 5 preguntas UNA POR UNA:
-       - 1. ¿Usa @gmail o @hotmail para su comunicación oficial?
-       - 2. ¿Tiene Cifrado Empresarial y MFA activo?
-       - 3. ¿Su web carga en menos de 2 segundos y vende?
-       - 4. ¿Tiene plan legal de Respaldo de Datos?
-       - 5. ¿Usa IA 24/7 para filtrar prospectos?
-    4. Tras la respuesta 5, da el VEREDICTO: "Riesgo Crítico detectado. He notificado al Director. Contacte vía WhatsApp para el blindaje o escriba a blindaje@inf01.com".
-    `;
+    // INSTRUCCIÓN MAESTRA ESTOICA
+    const systemPrompt = `Eres el AGENTE DE SEGURIDAD de INF01. Tono estoico y de élite. 
+    REGLAS: 
+    1. Máximo 20 palabras. 
+    2. Si el mensaje es 'PROTOCOL_INIT', pide Nombre y Correo para el reporte.
+    3. Si ya se identificó, haz las 5 preguntas de diagnóstico una por una.
+    4. Al final, da veredicto de RIESGO CRÍTICO y manda a WhatsApp o blindaje@inf01.com.`;
 
     try {
-        // Aquí conectamos con Gemini (usando tu API KEY configurada en Vercel)
-        // Por ahora, simulamos la respuesta para que veas la lógica:
-        let reply = "Entendido. Proceda con el protocolo."; 
-        
-        // Aquí iría la llamada real a la API de Google Gemini
-        // const response = await callGemini(systemPrompt, message);
-        // reply = response.text;
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent([systemPrompt, message]);
+        const response = await result.response;
+        const text = response.text();
 
-        res.status(200).json({ reply: reply });
+        res.status(200).json({ reply: text });
     } catch (error) {
-        res.status(500).json({ reply: "Error de conexión. Protocolo de seguridad activo." });
+        console.error(error);
+        res.status(500).json({ reply: "Error de protocolo. Reintente." });
     }
 }
