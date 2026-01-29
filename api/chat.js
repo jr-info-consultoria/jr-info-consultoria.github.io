@@ -3,39 +3,44 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    const questions = [
-        "¿Utiliza actualmente correos gratuitos como @gmail o @hotmail para su práctica profesional?",
-        "¿Cuenta con sistemas de Cifrado y MFA (Autenticación de Doble Factor) activos en sus accesos críticos?",
-        "¿Su sitio web actual carga en menos de 2 segundos y está diseñado para convertir visitantes en clientes?",
-        "¿Tiene un protocolo legal y técnico de respaldo para recuperar sus datos ante un posible ataque?",
-        "¿Implementa Agentes de IA 24/7 que filtren y califiquen a sus prospectos automáticamente?"
-    ];
+    if (!apiKey) return res.status(200).json({ reply: "🛡️ [ERROR]: API KEY no detectada." });
 
-    const step = history ? Math.floor(history.length / 2) : 0;
-    const identity = "Eres el Consultor Senior de INF01. Tu tono es profesional, experto y humano. Máximo 40 palabras.";
+    // 1. DEFINICIÓN DE LA HOJA DE RUTA (La IA la usará para guiarse)
+    const systemInstruction = `Eres el Especialista Senior de INF01. Tu tono es profesional, experto y humano. No eres un bot de cuestionario.
+    
+    TU MISIÓN: Completar este diagnóstico conversando. Analiza el historial para saber qué paso sigue:
+    PASO 1: Identificación (Nombre y Correo).
+    PASO 2: Pregunta sobre correos gratuitos (@gmail/@hotmail).
+    PASO 3: Pregunta sobre Cifrado y MFA (Doble Factor).
+    PASO 4: Pregunta sobre velocidad web (<2s) y ventas.
+    PASO 5: Pregunta sobre respaldo legal e IA operativa.
+    CIERRE: Informa RIESGO CRÍTICO y que el informe llegará a su correo.
 
-    let prompt = "";
-    if (step === 0) {
-        prompt = `${identity} Objetivo: Iniciar diagnóstico. Saluda y solicita Nombre y Correo para el reporte confidencial.`;
-    } else if (step <= 5) {
-        prompt = `${identity} 1. Comenta la respuesta del usuario con criterio experto. 2. Haz la pregunta ${step}: ${questions[step-1]}.`;
-    } else {
-        prompt = `${identity} Diagnóstico concluido. Informa sobre el RIESGO CRÍTICO y que el informe llegará a su correo pronto.`;
-    }
+    REGLAS:
+    - Comenta brevemente la respuesta del usuario antes de pasar a la siguiente pregunta.
+    - MÁXIMO 35 PALABRAS por respuesta.
+    - Si el usuario se desvía, retoma el diagnóstico con elegancia.`;
 
-    // PREPARACIÓN DE LA MEMORIA PARA GOOGLE
+    // 2. PREPARACIÓN DEL HISTORIAL (Sin cálculos matemáticos que se rayen)
     const contents = history || [];
-    contents.push({ role: "user", parts: [{ text: prompt + "\n\nUsuario dice: " + message }] });
+    contents.push({ role: "user", parts: [{ text: message }] });
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        // Usamos v1beta para activar la instrucción de sistema real
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: contents, // ENVIAMOS TODA LA MEMORIA
-                generationConfig: { temperature: 0.7, maxOutputTokens: 200 },
-                // DESACTIVAMOS FILTROS que causan el disco rayado
+                system_instruction: {
+                    parts: [{ text: systemInstruction }]
+                },
+                contents: contents,
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 250
+                },
                 safetySettings: [
                     { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }
@@ -49,11 +54,11 @@ export default async function handler(req, res) {
             const botReply = data.candidates[0].content.parts[0].text;
             res.status(200).json({ reply: botReply });
         } else {
-            // Fallback humano para que nunca más salga el mensaje de error de antes
-            res.status(200).json({ reply: "🛡️ Entiendo. Continuando con el análisis, ¿podría decirme si usa correos corporativos o gratuitos?" });
+            // Fallback si Google se bloquea
+            res.status(200).json({ reply: "🛡️ Entiendo su punto. Para continuar con el blindaje de su práctica, ¿podría confirmarme si usa correos corporativos o gratuitos?" });
         }
 
     } catch (error) {
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Por favor, reintente." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Jose, por favor reintente el envío." });
     }
 }
