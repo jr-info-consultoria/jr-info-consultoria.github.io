@@ -12,31 +12,33 @@ export default async function handler(req, res) {
     ];
 
     const isInitTrigger = message.includes("PROTOCOL_INIT");
-    const step = history ? Math.floor(history.length / 2) : 0;
-    
-    // 🛡️ CIRUGÍA 1: VALIDACIÓN DE HIERRO (Fuera de la IA)
-    // Buscamos si ya existe un correo con @ en el historial o en el mensaje actual
-    const hasEmailProvided = (history && history.some(h => h.parts[0].text.includes("@"))) || message.includes("@");
+    // Contamos cuántas respuestas ha dado el usuario realmente
+    const userMessages = history ? history.filter(h => h.role === "user").length : 0;
+    const step = isInitTrigger ? 0 : userMessages;
 
-    // Si no es el inicio y no tenemos un correo válido aún, bloqueamos el avance
-    if (!isInitTrigger && !hasEmailProvided) {
+    // 🛡️ VALIDACIÓN DE CORREO (Paso 1 real)
+    const hasEmailInHistory = history && history.some(h => h.parts[0].text.includes("@"));
+    const hasEmailInMessage = message.includes("@");
+
+    if (!isInitTrigger && step === 1 && !hasEmailInHistory && !hasEmailInMessage) {
         return res.status(200).json({ 
-            reply: "Para asegurar la entrega de su reporte de blindaje 2026, por favor incluya un nombre y un correo electrónico válido con el símbolo @." 
+            reply: "Para asegurar su reporte de blindaje 2026, por favor incluya un nombre y un correo electrónico válido con el símbolo @." 
         });
     }
 
-    // 🛡️ CIRUGÍA 2: SEGURO DE CIERRE (Evita el reciclaje)
-    const alreadyClosed = history && history.some(h => h.parts[0].text.includes("[CIERRE_AUTO]"));
-    if (alreadyClosed) {
-        return res.status(200).json({ reply: "Su sesión de diagnóstico ha concluido con éxito. El técnico informático ya ha recibido su solicitud. [CIERRE_AUTO]" });
+    // 🛡️ LÓGICA DE CIERRE (Paso final)
+    if (step > 5) {
+        return res.status(200).json({ 
+            reply: "Perfecto, Jose. Ya tenemos los datos necesarios. Estos serán enviados a nuestro técnico informático, quien se pondrá en contacto con usted vía correo electrónico para evaluar el diagnóstico completo SIN COSTO adicional. Muchas gracias por confiar en INF01. [CIERRE_AUTO]" 
+        });
     }
 
-    const identity = "Eres el Especialista Senior de INF01. Tono profesional y experto. Máximo 35 palabras.";
+    const identity = "Eres el Especialista Senior de INF01. Tono profesional, ejecutivo y experto. Máximo 40 palabras.";
     const systemPrompt = `${identity} 
-    TU MISIÓN: Completar el diagnóstico INF01.
-    1. Identificación: Ya validamos el correo. Saluda y agradece los datos.
-    2. Preguntas técnicas: Haz una a la vez según el historial.
-    3. Cierre: Informa que los datos van al técnico informático para el diagnóstico SIN COSTO. Termina con [CIERRE_AUTO]`;
+    Sigue este orden:
+    - Si el usuario dio su nombre/correo, agradécele y lanza la Pregunta 1: ${questions[0]}
+    - Si ya respondió preguntas, lanza la siguiente según el historial: ${questions[step-1] || questions[4]}
+    - Si es la última respuesta, despídete formalmente mencionando al técnico y el diagnóstico gratuito.`;
 
     try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 system_instruction: { parts: [{ text: systemPrompt }] },
                 contents: (history || []).concat([{ role: "user", parts: [{ text: message }] }]),
-                generationConfig: { temperature: 0.7, maxOutputTokens: 250 },
+                generationConfig: { temperature: 0.7, maxOutputTokens: 300 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }
@@ -55,15 +57,17 @@ export default async function handler(req, res) {
         });
 
         const data = await response.json();
+        let reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-        if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-            res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
-        } else {
-            // Fallback dinámico por si falla la IA
-            const fallback = step >= 1 && step <= 5 ? `Entendido. Sigamos: ${questions[step-1]}` : "Bienvenido a INF01. Para iniciar su blindaje, ¿me indica su nombre y correo?";
-            res.status(200).json({ reply: fallback });
+        if (!reply) {
+            // Fallback manual si Gemini se queda mudo
+            if (step === 0) reply = "Bienvenido a INF01. Para iniciar su blindaje, ¿me indica su nombre y correo?";
+            else if (step <= 5) reply = `Entendido. Sigamos: ${questions[step-1]}`;
+            else reply = "Diagnóstico concluido. Nuestro técnico le contactará pronto vía correo. [CIERRE_AUTO]";
         }
+
+        res.status(200).json({ reply });
     } catch (error) {
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Reintente el envío." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Reintente." });
     }
 }
