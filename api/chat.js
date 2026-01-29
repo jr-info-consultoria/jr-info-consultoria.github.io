@@ -3,20 +3,26 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    const systemPrompt = `Eres el Especialista Senior de INF01. Tono profesional y experto.
-    MÁXIMO 35 PALABRAS POR RESPUESTA.
-    
-    TU MISIÓN: Completar el diagnóstico INF01 en este orden:
-    1. Identificación: Solicita Nombre y Correo. No avances si el correo no tiene "@".
-    2. Pregunta: Uso de correos gratuitos (@gmail).
-    3. Pregunta: Cifrado y MFA (Doble Factor).
-    4. Pregunta: Velocidad web y conversión.
-    5. Pregunta: Protocolo legal de respaldo e IA.
-    6. CIERRE: Confirma que el técnico informático contactará al usuario para el diagnóstico completo SIN COSTO adicional.
-    
-    Al finalizar el punto 6, añade SIEMPRE: [CIERRE_AUTO]`;
+    const questions = [
+        "¿Utiliza actualmente correos gratuitos como @gmail o @hotmail para su práctica profesional?",
+        "¿Cuenta con sistemas de Cifrado y MFA (Autenticación de Doble Factor) activos en sus accesos críticos?",
+        "¿Su sitio web actual carga en menos de 2 segundos y está diseñado para convertir visitantes en clientes?",
+        "¿Tiene un protocolo legal y técnico de respaldo para recuperar sus datos ante un posible ataque?",
+        "¿Implementa Agentes de IA 24/7 que filtren y califiquen a sus prospectos automáticamente?"
+    ];
 
-    const isStart = !history || history.length === 0;
+    const step = history ? Math.floor(history.length / 2) : 0;
+    const identity = "Eres el Especialista Senior de INF01. Tono profesional y experto. Máximo 35 palabras.";
+
+    const systemPrompt = `${identity} 
+    TU MISIÓN: Completar el diagnóstico INF01 en este orden:
+    1. Identificación: Nombre y Correo (Validar @).
+    2. Pregunta: Correos gratuitos.
+    3. Pregunta: Cifrado y MFA.
+    4. Pregunta: Velocidad web.
+    5. Pregunta: Respaldo e IA.
+    6. CIERRE: Datos enviados al técnico. Contacto vía correo SIN COSTO. [CIERRE_AUTO]`;
+
     const contents = history || [];
     contents.push({ role: "user", parts: [{ text: message }] });
 
@@ -41,17 +47,17 @@ export default async function handler(req, res) {
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            // --- CIRUGÍA DE DESBLOQUEO: Si la IA falla pero hay un correo, forzamos el avance ---
-            if (message.includes("@")) {
-                res.status(200).json({ reply: "Excelente, correo registrado. Iniciemos el análisis técnico: ¿Utiliza actualmente correos gratuitos como @gmail o @hotmail para su práctica profesional?" });
+            // --- CIRUGÍA DE DESBLOQUEO GPS ---
+            if (step === 0 && !message.includes("@")) {
+                res.status(200).json({ reply: "Para asegurar su reporte de blindaje 2026, por favor incluya un correo electrónico válido con el símbolo @." });
+            } else if (step >= 1 && step <= 5) {
+                // Si la IA falla, el código sabe qué pregunta toca sin pedir el correo
+                res.status(200).json({ reply: `Entendido. Sigamos: ${questions[step-1]}` });
             } else {
-                const fallback = isStart 
-                    ? "Bienvenido a INF01. Para su reporte confidencial 2026, ¿me indica su nombre y correo electrónico válido?" 
-                    : "Para continuar, asegúrese de ingresar un correo electrónico válido (con @) para que nuestro sistema pueda procesar su diagnóstico.";
-                res.status(200).json({ reply: fallback });
+                res.status(200).json({ reply: "Diagnóstico procesado. Los datos han sido enviados al técnico informático para su evaluación gratuita vía correo electrónico. [CIERRE_AUTO]" });
             }
         }
     } catch (error) {
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Jose, reintente el envío." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Reintente el envío." });
     }
 }
