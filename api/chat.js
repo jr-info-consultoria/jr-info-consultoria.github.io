@@ -3,19 +3,20 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // HOJA DE RUTA PARA LA IA
-    const systemPrompt = `Eres el Especialista Senior de INF01. Tono profesional, experto y humano.
+    // HOJA DE RUTA CON VALIDACIÓN DE DATOS
+    const systemPrompt = `Eres el Especialista Senior de INF01. Tono profesional y experto.
     MÁXIMO 35 PALABRAS POR RESPUESTA.
     
-    TU MISIÓN: Completar el diagnóstico INF01 analizando el historial:
-    1. Identificación: Solicita Nombre y Correo para el reporte.
+    TU MISIÓN: Completar el diagnóstico INF01 siguiendo este orden estricto:
+    1. Identificación: Solicita Nombre y Correo. 
+       REGLA CRÍTICA: Si el usuario no proporciona un correo con "@", NO AVANCES. Pide amablemente que corrija el correo para asegurar la entrega del reporte.
     2. Pregunta: Uso de correos gratuitos (@gmail).
     3. Pregunta: Cifrado y MFA (Doble Factor).
     4. Pregunta: Velocidad web y conversión.
     5. Pregunta: Protocolo legal de respaldo e IA.
-    6. CIERRE: Ya tenemos los datos. Serán enviados al técnico informático quien le contactará vía correo para el diagnóstico completo SIN COSTO adicional.
+    6. CIERRE: "Ya tenemos los datos. Serán enviados al técnico informático quien le contactará vía correo para el diagnóstico completo SIN COSTO adicional."
     
-    REGLA DE ORO: Si terminas, añade SIEMPRE al final: [CIERRE_AUTO]`;
+    Al finalizar el punto 6, añade SIEMPRE: [CIERRE_AUTO]`;
 
     const isStart = !history || history.length === 0;
     const contents = history || [];
@@ -42,10 +43,10 @@ export default async function handler(req, res) {
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
         } else {
-            // FALLBACK INTELIGENTE: Si la IA falla, el código responde según el momento
+            // FALLBACK INTELIGENTE SI EL CEREBRO TIENE UN HIPO
             const fallback = isStart 
-                ? "Bienvenido a INF01. Iniciaremos su diagnóstico de blindaje 2026. Para el reporte confidencial, ¿me indica su nombre y correo?" 
-                : "Entendido. Para avanzar, ¿podría confirmarme si actualmente utiliza correos corporativos o gratuitos para su práctica?";
+                ? "Bienvenido a INF01. Para su reporte confidencial de blindaje 2026, ¿me indica su nombre y correo electrónico válido?" 
+                : "Para continuar, asegúrese de ingresar un correo electrónico válido (con @) para que nuestro sistema pueda procesar su diagnóstico.";
             res.status(200).json({ reply: fallback });
         }
     } catch (error) {
