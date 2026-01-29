@@ -396,20 +396,23 @@
                 const data = await response.json();
                 const msgEl = document.getElementById(msgId);
                 
-                // Limpiamos la respuesta de la etiqueta de cierre antes de mostrarla
-                const cleanReply = data.reply.replace('[CIERRE_SISTEMA]', '').trim();
+                // --- CIRUGÍA DE CIERRE AUTOMÁTICO ---
+                // Limpiamos la etiqueta de cierre de la vista del usuario
+                const cleanReply = data.reply.replace('[CIERRE_AUTO]', '').trim();
                 
                 if (msgEl) msgEl.innerHTML = cleanReply;
                 
-                // Actualizamos historial con la respuesta limpia
                 chatHistory.push({ role: "user", parts: [{ text: message }] });
                 chatHistory.push({ role: "model", parts: [{ text: cleanReply }] });
 
-                // LÓGICA DE CIERRE AUTOMÁTICO DE ELITE
-                if (data.reply.includes('[CIERRE_SISTEMA]')) {
+                // Detectamos la señal de cierre para apagar la ventana automáticamente
+                if (data.reply.includes('[CIERRE_AUTO]')) {
                     setTimeout(() => {
-                        toggleChat(false); 
-                    }, 8000); // 8 segundos de cortesía para lectura final
+                        // Cerramos físicamente la interfaz del chat
+                        chatContainer.classList.add('chat-closed');
+                        // Opcional: Limpiamos historial para la siguiente sesión
+                        chatHistory = [];
+                    }, 6000); // 6 segundos para permitir la lectura final del diagnóstico
                 }
 
             } catch (error) {
