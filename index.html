@@ -324,6 +324,7 @@
         };
 
         let currentLang = 'es';
+        let chatHistory = []; // MEMORIA DE LA CONVERSACIÓN
         const chatContainer = document.getElementById('chat-container');
         const messagesDiv = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
@@ -353,7 +354,8 @@
             chatContainer.classList.toggle('chat-closed');
             
             if (isOpening) {
-                messagesDiv.innerHTML = ""; // Limpia siempre al abrir para iniciar fresco
+                messagesDiv.innerHTML = ""; 
+                chatHistory = []; // RESET DE MEMORIA AL ABRIR
                 if (isDiagnosis) {
                     sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
                 } else {
@@ -385,13 +387,22 @@
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, lang: currentLang })
+                    body: JSON.stringify({ 
+                        message: message, 
+                        lang: currentLang,
+                        history: chatHistory // ENVIAMOS LA MEMORIA AL BACKEND
+                    })
                 });
 
                 const data = await response.json();
                 const loadingEl = document.getElementById(loadingId);
                 if (loadingEl) loadingEl.remove();
                 messagesDiv.innerHTML += `<div class="bot-msg">${data.reply}</div>`;
+                
+                // ACTUALIZAMOS LA MEMORIA LOCAL
+                chatHistory.push({ role: "user", parts: [{ text: message }] });
+                chatHistory.push({ role: "model", parts: [{ text: data.reply }] });
+
             } catch (error) {
                 const loadingEl = document.getElementById(loadingId);
                 if (loadingEl) loadingEl.innerHTML = "Error de conexión. Protocolo de seguridad activo.";
