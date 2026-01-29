@@ -3,26 +3,33 @@ export default async function handler(req, res) {
     const { message, history } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // INSTRUCCIÓN MAESTRA: Identidad y Hoja de Ruta.
-    const systemInstruction = `Eres el Especialista Senior de INF01. Tu tono es profesional, experto y humano.
+    // INSTRUCCIÓN MAESTRA: Identidad, Tono y Temas a cubrir.
+    const systemPrompt = `Eres el Especialista Senior de INF01. Tu tono es profesional, experto y humano.
     MÁXIMO 35 PALABRAS POR RESPUESTA.
     
-    TU MISIÓN: Completar este diagnóstico conversando naturalmente.
+    TU MISIÓN: Completar este diagnóstico conversando naturalmente. No seas un robot.
     
-    HOJA DE RUTA (Analiza el historial para saber qué sigue):
-    1. Identificación: Si no tienes Nombre y Correo, pídalos profesionalmente.
-    2. Pregunta 1: Sobre el uso de correos gratuitos (@gmail/@hotmail).
-    3. Pregunta 2: Sobre Cifrado y MFA (Doble Factor).
-    4. Pregunta 3: Sobre velocidad web (<2s) y ventas.
-    5. Pregunta 4: Sobre protocolo legal de respaldo y recuperación.
-    6. Pregunta 5: Sobre el uso de IA 24/7 para prospectos.
-    7. Cierre: Declara RIESGO CRÍTICO y avisa que el informe llegará a su correo.
+    TEMAS A CUBRIR (Analiza la charla para ver qué falta):
+    1. Identificación (Nombre y Correo).
+    2. Riesgo de usar correos gratuitos (@gmail).
+    3. Cifrado y MFA.
+    4. Velocidad y conversión web.
+    5. Respaldo legal e IA operativa.
+    6. CIERRE: Dile que hay RIESGO CRÍTICO y que el informe llegará a su correo pronto.
     
-    REGLA DE ORO: Si el usuario dice algo corto o un saludo, responde como un humano experto y sigue con el diagnóstico. No uses códigos como 'P1'.`;
+    REGLA DE ORO: Si el usuario saluda o dice algo corto, responde como un humano experto y sigue adelante.`;
 
-    // Combinamos la instrucción con el historial para que la IA tenga contexto total
-    const contents = history || [];
-    contents.push({ role: "user", parts: [{ text: message }] });
+    // Preparamos los mensajes: Ponemos la instrucción al puro inicio del historial
+    const contents = [];
+    
+    // Si no hay historia, iniciamos con la instrucción
+    if (!history || history.length === 0) {
+        contents.push({ role: "user", parts: [{ text: systemPrompt + "\n\nUsuario dice: " + message }] });
+    } else {
+        // Si ya hay historia, la respetamos y añadimos el mensaje nuevo
+        contents.push(...history);
+        contents.push({ role: "user", parts: [{ text: message }] });
+    }
 
     try {
         const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
@@ -31,9 +38,8 @@ export default async function handler(req, res) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: contents,
-                system_instruction: { parts: [{ text: systemInstruction }] },
-                generationConfig: { temperature: 0.7, maxOutputTokens: 200 },
-                // APAGAMOS LOS FILTROS que causan el bloqueo del disco rayado
+                generationConfig: { temperature: 0.8, maxOutputTokens: 200 },
+                // BLINDAJE CONTRA CENSURA: Evitamos que Google bloquee palabras técnicas
                 safetySettings: [
                     { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" }
@@ -43,15 +49,16 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
+        // Si la IA responde bien
         if (data.candidates && data.candidates[0] && data.candidates[0].content) {
             const botReply = data.candidates[0].content.parts[0].text;
             res.status(200).json({ reply: botReply });
         } else {
-            // Fallback humano por si Google tiene un hipo
-            res.status(200).json({ reply: "🛡️ Entiendo. Para seguir con el blindaje de su práctica, ¿podría confirmarme si usa correos corporativos o gratuitos?" });
+            // FALLBACK ESTRATÉGICO: Si Google bloquea la respuesta, el bot sigue la charla solo.
+            res.status(200).json({ reply: "🛡️ Entiendo. Para avanzar con el diagnóstico de blindaje para su negocio, ¿podría decirme si actualmente usa correos corporativos o gratuitos?" });
         }
 
     } catch (error) {
-        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Reintente el envío." });
+        res.status(200).json({ reply: "🛡️ [SISTEMA]: Enlace inestable. Jose, por favor reintente el envío." });
     }
 }
