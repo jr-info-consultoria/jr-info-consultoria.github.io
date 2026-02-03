@@ -31,15 +31,11 @@
       "name": "INF01",
       "image": "https://inf01.com/logo-inf01.png",
       "url": "https://inf01.com",
-      "telephone": "",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "San José",
         "addressCountry": "CR"
-      },
-      "sameAs": [
-        "https://www.facebook.com/TU_PERFIL"
-      ]
+      }
     }
     </script>
 
@@ -63,7 +59,6 @@
             overflow-x: hidden;
         }
 
-        /* SELECTOR DE IDIOMA */
         .lang-switcher {
             position: fixed;
             top: 20px;
@@ -92,14 +87,12 @@
             box-shadow: 0 0 10px var(--accent);
         }
 
-        /* Hero con efecto Neón */
         .hero { 
             text-align: center; 
             padding: 140px 20px; 
             background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); 
         }
 
-        /* Corregimos H1 para SEO sin afectar estilo */
         h1#hero-tag {
             color: var(--accent); 
             font-weight: bold; 
@@ -119,10 +112,6 @@
             transition: 0.4s;
         }
 
-        .main-logo:hover {
-            filter: drop-shadow(0 0 25px var(--neon-glow)) drop-shadow(0 0 45px rgba(88, 166, 255, 0.4));
-        }
-
         .hero p { 
             font-size: 1.1rem; 
             color: #8b949e; 
@@ -131,7 +120,6 @@
             line-height: 1.6;
         }
 
-        /* Servicios */
         .services { 
             display: flex; 
             justify-content: center; 
@@ -155,13 +143,10 @@
         .card:hover { 
             border-color: var(--accent); 
             transform: translateY(-10px);
-            box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
         }
 
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
-        
-        /* Corregimos H2 para SEO */
-        .card h2 { color: #fff; margin: 0 0 15px 0; font-size: 1.4rem; font-family: inherit; }
+        .card h2 { color: #fff; margin: 0 0 15px 0; font-size: 1.4rem; }
 
         .cta-btn { 
             display: inline-block; 
@@ -173,107 +158,31 @@
             border-radius: 50px; 
             font-weight: bold; 
             transition: 0.3s; 
-            margin-top: 20px;
             cursor: pointer;
         }
 
-        .cta-btn:hover { 
-            background: var(--accent); 
-            color: #000;
-            box-shadow: 0 0 20px var(--accent);
-        }
+        .cta-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
 
-        /* RESPONSIVIDAD (Arregla el error de CSS Media Queries) */
         @media (max-width: 768px) {
             .hero { padding: 80px 20px; }
-            .main-logo { max-width: 280px; }
             .card { width: 100%; max-width: 320px; }
-            .lang-switcher { right: 15px; top: 15px; }
         }
 
-        /* CHATBOT STYLES */
+        /* CHATBOT */
         #chat-container {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 350px;
-            height: 500px;
-            background: var(--card-bg);
-            border: 1px solid #30363d;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            z-index: 1000;
-            transition: 0.3s;
+            position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px;
+            background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px;
+            display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            z-index: 1000; transition: 0.3s;
         }
         .chat-closed { transform: scale(0); opacity: 0; pointer-events: none; }
-        
-        #chat-header {
-            background: rgba(88, 166, 255, 0.1);
-            padding: 15px;
-            border-bottom: 1px solid #30363d;
-            color: var(--accent);
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-        }
-
+        #chat-header { background: rgba(88, 166, 255, 0.1); padding: 15px; border-bottom: 1px solid #30363d; color: var(--accent); font-weight: bold; display: flex; justify-content: space-between; }
         #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; scroll-behavior: smooth; }
         .bot-msg { background: rgba(88, 166, 255, 0.05); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--accent); color: #fff; }
         .user-msg { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: right; color: var(--accent); }
-
-        #chat-input-area {
-            padding: 15px;
-            border-top: 1px solid #30363d;
-            display: flex;
-            gap: 10px;
-        }
-
-        #user-input {
-            flex: 1;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        #user-input:focus { border-color: var(--accent); }
-
-        .send-btn {
-            background: var(--accent);
-            color: #000;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        #chat-trigger {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 0 15px var(--accent);
-            z-index: 1001;
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #chat-trigger i {
-            color: var(--bg) !important;
-        }
+        #chat-input-area { padding: 15px; border-top: 1px solid #30363d; display: flex; gap: 10px; }
+        #user-input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
+        #chat-trigger { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: var(--bg); border: none; cursor: pointer; box-shadow: 0 0 15px var(--accent); z-index: 1001; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; }
 
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.9rem; }
     </style>
@@ -287,9 +196,7 @@
 
     <section class="hero">
         <h1 id="hero-tag">Ciberseguridad & Marketing de Alta Conversión</h1>
-        
-        <img src="logo-inf01.png" alt="INF01 - Expertos en Blindaje Digital" class="main-logo" width="400" height="150">
-
+        <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo" width="400" height="150">
         <p id="hero-text">¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.</p>
         <a href="#" class="cta-btn" onclick="toggleChat(true)" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
     </section>
@@ -323,7 +230,7 @@
         </div>
         <div id="chat-messages"></div>
         <div id="chat-input-area">
-            <input type="text" id="user-input" placeholder="Describa su problema aquí..." onkeypress="handleKey(event)">
+            <input type="text" id="user-input" placeholder="Escriba aquí..." onkeypress="handleKey(event)">
             <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
@@ -345,13 +252,7 @@
                 srv3Title: "Agentes IA de Élite",
                 srv3Text: "Sistemas autónomos que filtran, califican y cierran prospectos por usted. Su oficina operando 24/7.",
                 footer: "© 2026 INF01 | Blindaje Digital para Profesionales | Costa Rica",
-                botName: "🛡️ Agente de Seguridad INF01",
-                botNameSales: "💼 Asesor Técnico & Ventas",
-                botStart: "Protocolo de Seguridad iniciado. Soy el Agente INF01. ¿Cuál es el punto de quiebre que necesita blindar hoy?",
-                botStartSales: "Bienvenido a la Dirección Estratégica de INF01. Soy su Asesor Técnico. ¿Hablamos de cómo blindar su prestigio y optimizar su conversión hoy?",
-                placeholder: "Describa su problema aquí...",
-                thinking: "Escaneando vulnerabilidades...",
-                thinkingSales: "Consultando con la Dirección..."
+                botName: "🛡️ Agente de Seguridad INF01"
             },
             en: {
                 heroTag: "Cybersecurity & High-Conversion Marketing",
@@ -364,22 +265,24 @@
                 srv3Title: "Elite AI Agents",
                 srv3Text: "Autonomous systems that filter, qualify, and close leads for you. Your office operating 24/7.",
                 footer: "© 2026 INF01 | Digital Shielding for Professionals | Costa Rica",
-                botName: "🛡️ INF01 Security Agent",
-                botNameSales: "💼 Tech & Sales Consultant",
-                botStart: "Security Protocol initiated. I am the INF01 Agent. What is the breaking point you need to shield in your business today?",
-                botStartSales: "Welcome to INF01 Strategy Hub. I am your Technical Advisor. Shall we discuss how to shield your prestige and optimize conversion today?",
-                placeholder: "Describe your issue here...",
-                thinking: "Scanning vulnerabilities...",
-                thinkingSales: "Consulting Management..."
+                botName: "🛡️ INF01 Security Agent"
             }
         };
 
+        let etapa = 0; 
+        let respuestas = [];
         let currentLang = 'es';
-        let chatHistory = []; 
-        let currentBot = 'sales'; 
         const chatContainer = document.getElementById('chat-container');
         const messagesDiv = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
+
+        const preguntasDiag = [
+            "1. ¿Utiliza actualmente correos gratuitos como @gmail o @yahoo para su negocio?",
+            "2. ¿Tiene activa la Verificación en Dos Pasos (MFA) en todos sus accesos críticos?",
+            "3. ¿Su sitio web carga en menos de 2 segundos o siente que espanta clientes por lento?",
+            "4. ¿Cuenta con Agentes de IA que atiendan y califiquen prospectos mientras usted duerme?",
+            "5. ¿Sabía que una brecha de seguridad hoy le costaría entre $15k y $50k en multas de la SBA?"
+        ];
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -395,93 +298,68 @@
             document.getElementById('srv3-title').innerText = texts[lang].srv3Title;
             document.getElementById('srv3-text').innerText = texts[lang].srv3Text;
             document.getElementById('footer-copy').innerHTML = `<p>${texts[lang].footer}</p>`;
-            
-            document.getElementById('bot-header-name').innerText = (currentBot === 'security') ? texts[lang].botName : texts[lang].botNameSales;
-            userInput.placeholder = texts[lang].placeholder;
-            
-            const startMsg = (currentBot === 'security') ? texts[lang].botStart : texts[lang].botStartSales;
-            messagesDiv.innerHTML = `<div class="bot-msg">${startMsg}</div>`;
+            document.getElementById('bot-header-name').innerText = texts[lang].botName;
         }
 
         function toggleChat(isDiagnosis = false) {
             const isOpening = chatContainer.classList.contains('chat-closed');
             chatContainer.classList.toggle('chat-closed');
-            
             if (isOpening) {
                 messagesDiv.innerHTML = ""; 
-                chatHistory = []; 
-                if (isDiagnosis) {
-                    currentBot = 'security';
-                    document.getElementById('bot-header-name').innerText = texts[currentLang].botName;
-                    sendMessage("PROTOCOL_INIT: DIAGNOSTIC_START");
-                } else {
-                    currentBot = 'sales';
-                    document.getElementById('bot-header-name').innerText = texts[currentLang].botNameSales;
-                    messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStartSales}</div>`;
-                }
+                etapa = 0;
+                respuestas = [];
+                sendMessage("START_PROTOCOL"); 
             }
         }
 
-        function handleKey(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
+        function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
 
         async function sendMessage(autoMessage = null) {
             const message = autoMessage || userInput.value.trim();
-            if (!message) return;
+            if (!message && etapa !== 0) return;
 
             if (!autoMessage) {
                 messagesDiv.innerHTML += `<div class="user-msg">${message}</div>`;
                 userInput.value = '';
             }
-            
+
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            const msgId = "msg-" + Date.now();
-            const thinkingText = (currentBot === 'security') ? texts[currentLang].thinking : texts[currentLang].thinkingSales;
-            
-            messagesDiv.innerHTML += `<div id="${msgId}" class="bot-msg"><b>INF01:</b> ${thinkingText}</div>`;
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            let botReply = "";
 
-            const endpoint = (message.includes("PROTOCOL_INIT") || currentBot === 'security') ? '/api/chat' : '/api/sales';
-
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message, history: chatHistory })
-                });
-
-                const data = await response.json();
-                const msgEl = document.getElementById(msgId);
-                const cleanReply = data.reply.replace('[CIERRE_AUTO]', '').replace('[INVITAR_CITA]', '').trim();
+            if (etapa === 0) {
+                botReply = `<b>¡Bienvenido a INF01!</b> Soy su Especialista Senior. Para brindarle un diagnóstico real de su infraestructura, primero debe responder 5 preguntas clave de seguridad. ¿Podemos iniciar?`;
+                etapa = 1;
+            } 
+            else if (etapa === 1) {
+                botReply = "Excelente. Iniciando escaneo... <br><br><b>Pregunta 1:</b> " + preguntasDiag[0];
+                etapa = 2;
+            } 
+            else if (etapa >= 2 && etapa <= 5) {
+                respuestas.push(message);
+                botReply = `<b>Pregunta ${etapa}:</b> ` + preguntasDiag[etapa - 1];
+                etapa++;
+            } 
+            else if (etapa === 6) {
+                respuestas.push(message);
+                botReply = `<b>RESULTADO:</b> Su infraestructura presenta vulnerabilidades <b>CRÍTICAS</b>. Está expuesto a suplantación de identidad y pérdida de reputación.<br><br>Para enviarle el informe técnico y realizar el escaneo profundo, por favor dígame su <b>Nombre y Correo Electrónico</b>.`;
+                etapa = 7;
+            } 
+            else if (etapa === 7) {
+                botReply = `<b>PROTOCOLO ACTIVADO.</b> Gracias. Nuestro Director, Jose Ruiz, ha recibido su alerta. Analizaremos su caso y lo contactaremos en las próximas 24 horas para cerrar sus brechas de seguridad.<br><br><i>Cerrando sesión segura en 8 segundos...</i>`;
                 
-                if (msgEl) msgEl.innerHTML = cleanReply;
-                
-                chatHistory.push({ role: "user", parts: [{ text: message }] });
-                chatHistory.push({ role: "model", parts: [{ text: cleanReply }] });
-
-                if (data.reply.includes('[CIERRE_AUTO]')) {
-                    setTimeout(() => {
-                        chatContainer.classList.add('chat-closed');
-                        chatHistory = [];
-                    }, 8000);
-                }
-
-                if (data.reply.includes('[INVITAR_CITA]')) {
-                    setTimeout(() => {
-                        messagesDiv.innerHTML += `<div class="bot-msg" style="border-left: 3px solid #ff9f43; background: rgba(255,159,67,0.05);"><b>Nota:</b> ¿Desea que agendemos una sesión estratégica directa con nuestro Director para auditar su caso?</div>`;
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                    }, 1000);
-                }
-
-            } catch (error) {
-                const msgEl = document.getElementById(msgId);
-                if (msgEl) msgEl.innerHTML = "Error de conexión. Protocolo de seguridad activo.";
+                setTimeout(() => {
+                    chatContainer.classList.add('chat-closed');
+                    etapa = 0;
+                    respuestas = [];
+                }, 8000);
             }
+
+            const msgId = "msg-" + Date.now();
+            messagesDiv.innerHTML += `<div id="${msgId}" class="bot-msg"><b>INF01:</b> ${botReply}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStartSales}</div>`;
+        document.getElementById('bot-header-name').innerText = texts[currentLang].botName;
     </script>
 </body>
 </html>
