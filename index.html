@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YM7QY2YBVV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-YM7QY2YBVV');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>INF01 | Ciberseguridad, IA & Marketing de Élite</title>
     <meta name="description" content="INF01: Expertos en blindaje digital, automatización con IA y marketing de alta conversión.">
     <meta name="google-site-verification" content="5DrPhuLt-kzLOBLRS_y4mEya9T-hCs0bUdpu38IfqBk" />
@@ -17,16 +25,10 @@
             --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; 
             --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.8); 
         }
-
-        body { 
-            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
-            margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
-        }
-
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .lang-switcher { position: fixed; top: 20px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
         .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; }
         .lang-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
-
         .hero { text-align: center; padding: 140px 20px; background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); }
 
         /* LOGO NEÓN */
@@ -35,11 +37,9 @@
             filter: drop-shadow(0 0 15px var(--accent));
             margin-bottom: 20px; transition: 0.5s ease; cursor: pointer; outline: none;
         }
-
         @media (min-width: 769px) {
             .main-logo:hover { filter: drop-shadow(0 0 25px var(--accent)) drop-shadow(0 0 50px var(--neon-glow)); transform: scale(1.03); }
         }
-
         @media (max-width: 768px) {
             .hero { padding: 80px 20px; }
             .main-logo { max-width: 280px; filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 40px var(--neon-glow)) !important; }
@@ -47,22 +47,15 @@
 
         h1#hero-tag { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; }
         .hero p { font-size: 1.1rem; color: #8b949e; max-width: 600px; margin: 25px auto; line-height: 1.6; }
-
-        /* SERVICIOS CON EFECTO RESTAURADO */
         .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 80px; margin-top: -60px; }
         .card { 
             background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; 
             padding: 40px 30px; width: 280px; text-align: center; transition: 0.4s ease; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
         }
-        .card:hover { 
-            border-color: var(--accent); 
-            transform: translateY(-10px); 
-            box-shadow: 0 0 20px rgba(88, 166, 255, 0.2); 
-        }
+        .card:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 0 20px rgba(88, 166, 255, 0.2); }
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
         .card h2 { color: #fff; margin: 0 0 15px 0; font-size: 1.4rem; }
-
         .cta-btn { display: inline-block; background: transparent; color: var(--accent); padding: 18px 40px; text-decoration: none; border: 2px solid var(--accent); border-radius: 50px; font-weight: bold; transition: 0.3s; cursor: pointer; }
         .cta-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
 
@@ -81,25 +74,21 @@
     </style>
 </head>
 <body>
-
     <div class="lang-switcher">
         <button id="btn-es" class="lang-btn active" onclick="changeLanguage('es')">ES</button>
         <button id="btn-en" class="lang-btn" onclick="changeLanguage('en')">EN</button>
     </div>
-
     <section class="hero">
         <h1 id="hero-tag">Ciberseguridad & Marketing de Alta Conversión</h1>
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo" width="400" height="150">
         <p id="hero-text">¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.</p>
         <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
     </section>
-
     <section class="services">
         <div class="card"><i class="fas fa-user-shield"></i><h2 id="srv1-title">Blindaje de Identidad</h2><p id="srv1-text">Eliminamos la vulnerabilidad de correos gratuitos.</p></div>
-        <div class="card"><i class="fas fa-chart-line"></i><h2 id="srv2-title">Ingeniería de Conversión</h2><p id="srv2-text">Sitios de alto impacto que transforman visitantes en clientes reales.</p></div>
+        <div class="card"><i class="fas fa-chart-line"></i><h2 id="srv2-title">Ingeniería de Conversión</h2><p id="srv2-text">Sitios que transforman visitantes en clientes reales.</p></div>
         <div class="card"><i class="fas fa-microchip"></i><h2 id="srv3-title">Agentes IA de Élite</h2><p id="srv3-text">Sistemas autónomos que operan su oficina 24/7.</p></div>
     </section>
-
     <div id="chat-container" class="chat-closed">
         <div id="chat-header"><span id="bot-header-name">🛡️ Agente de Seguridad INF01</span><span onclick="toggleChat()" style="cursor:pointer">&times;</span></div>
         <div id="chat-messages"></div>
@@ -108,7 +97,6 @@
             <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
-
     <footer id="footer-copy"><p>&copy; 2026 INF01 | Costa Rica & Miami</p></footer>
 
     <script>
@@ -118,13 +106,13 @@
                 heroText: "¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.",
                 heroCta: "Iniciar Diagnóstico de Blindaje",
                 srv1Title: "Blindaje de Identidad", srv1Text: "Eliminamos la vulnerabilidad de correos gratuitos.",
-                srv2Title: "Ingeniería de Conversión", srv2Text: "Sitios de alto impacto que transforman visitantes en clientes reales.",
+                srv2Title: "Ingeniería de Conversión", srv2Text: "Sitios de alto impacto que transforman visitantes en clientes.",
                 srv3Title: "Agentes IA de Élite", srv3Text: "Sistemas autónomos que operan su oficina 24/7.",
                 footer: "© 2026 INF01 | Costa Rica & Miami",
                 welcome: "<b>¡Bienvenido a INF01!</b> Soy su Especialista Senior. Debo realizarle 5 preguntas clave. ¿Iniciamos?",
                 questions: ["", "1. ¿Usa correos gratuitos (@gmail/@yahoo)?", "2. ¿Tiene activa la Verificación MFA?", "3. ¿Su web carga en menos de 2s?", "4. ¿Usa IA para atender clientes?", "5. ¿Sabía que una brecha hoy le costaría prestigio y multas locales?"],
                 result: "<b>RESULTADO:</b> Riesgo <b>CRÍTICO</b>. Para preparar su reporte técnico, dígame su <b>Nombre y Correo</b>.",
-                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará automáticamente en 1 minuto. Su información será enviada a un técnico vía WhatsApp.",
+                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará automáticamente en 1 minuto. Su información será enviada a un técnico para ser atendido vía WhatsApp.",
                 wa_intro: "⚠️ *REPORTE TÉCNICO INF01*\n\n",
                 wa_btn: "TRANSFERIR DIAGNÓSTICO AL TÉCNICO",
                 header: "🛡️ Agente de Seguridad INF01",
@@ -160,7 +148,6 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
             
-            // Actualizar Interfaz (UI)
             document.getElementById('hero-tag').innerText = translations[lang].heroTag;
             document.getElementById('hero-text').innerText = translations[lang].heroText;
             document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${translations[lang].heroCta}`;
@@ -200,18 +187,28 @@
             }
             else if (etapa === 6) { diagnosticAnswers.push(msg); reply = t.result; etapa = 7; }
             else if (etapa === 7) { 
+                // TRACKING: Diagnóstico completado
+                if(typeof gtag === 'function') {
+                    gtag('event', 'generate_lead', { 'event_category': 'Chatbot', 'event_label': 'Diagnosis Completed' });
+                }
+
                 const report = `${t.wa_intro}*CLIENTE:* ${msg}\n*HISTORIAL:* \n- Q1: ${diagnosticAnswers[0]}\n- Q2: ${diagnosticAnswers[1]}\n- Q3: ${diagnosticAnswers[2]}\n- Q4: ${diagnosticAnswers[3]}\n- Q5: ${diagnosticAnswers[4]}\n\n*ESTADO:* RIESGO CRÍTICO`;
                 const waUrl = `https://wa.me/50672057795?text=${encodeURIComponent(report)}`;
-                reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> ${t.wa_btn}</a>`;
+                reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn" onclick="trackWhatsAppClick()"><i class="fab fa-whatsapp"></i> ${t.wa_btn}</a>`;
                 
                 setTimeout(() => { 
                     const container = document.getElementById('chat-container');
                     if (!container.classList.contains('chat-closed')) { container.classList.add('chat-closed'); etapa = 0; }
                 }, 60000);
             }
-
             messagesDiv.innerHTML += `<div class="bot-msg"><b>INF01:</b> ${reply}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function trackWhatsAppClick() {
+            if(typeof gtag === 'function') {
+                gtag('event', 'contact_whatsapp', { 'event_category': 'Chatbot', 'event_label': 'WhatsApp Transfer' });
+            }
         }
     </script>
 </body>
