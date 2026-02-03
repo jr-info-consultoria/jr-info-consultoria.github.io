@@ -4,24 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <meta name="google-site-verification" content="5DrPhuLt-kzLOBLRS_y4mEya9T-hCs0bUdpu38IfqBk" />
-
-    <title>INF01 | Blindaje Digital & Marketing de Élite en Costa Rica</title>
-    <meta name="description" content="INF01: Expertos en blindaje digital y marketing de alta conversión para profesionales en Costa Rica. Protegemos su reputación y escalamos su marca con tecnología de élite.">
-    <meta name="keywords" content="Ciberseguridad Costa Rica, Blindaje Digital, Marketing para Abogados, Marketing para Médicos, INF01, Seguridad Digital, Conversión Web, Jose Ruiz Garcia">
+    <title>INF01 | Ciberseguridad, IA & Marketing de Élite en Costa Rica y Miami</title>
+    <meta name="description" content="INF01: Expertos en blindaje digital, automatización con IA y marketing de alta conversión. Protegemos su reputación profesional con infraestructura de élite.">
+    <meta name="keywords" content="Ciberseguridad Costa Rica, Marketing Miami, Blindaje Digital, IA para empresas, INF01, Jose Ruiz Garcia, Seguridad de correo">
     <meta name="author" content="INF01 - Director Jose Ruiz García">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://inf01.com">
 
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <meta name="google-site-verification" content="5DrPhuLt-kzLOBLRS_y4mEya9T-hCs0bUdpu38IfqBk" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+
     <meta property="og:title" content="INF01 | Blindaje Digital & Marketing de Élite">
     <meta property="og:description" content="¿Su reputación depende de un @gmail? Blinde su práctica profesional con el estándar INF01.">
-    <meta property="og:image" content="logo-inf01.png">
+    <meta property="og:image" content="https://inf01.com/logo-inf01.png">
     <meta property="og:url" content="https://inf01.com">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_CR">
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "INF01",
+      "image": "https://inf01.com/logo-inf01.png",
+      "url": "https://inf01.com",
+      "telephone": "",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "San José",
+        "addressCountry": "CR"
+      },
+      "sameAs": [
+        "https://www.facebook.com/TU_PERFIL"
+      ]
+    }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
             --bg: #0d1117; 
@@ -75,6 +99,17 @@
             background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); 
         }
 
+        /* Corregimos H1 para SEO sin afectar estilo */
+        h1#hero-tag {
+            color: var(--accent); 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            margin-bottom: 15px; 
+            font-size: 0.8rem;
+            display: block;
+        }
+
         .main-logo {
             max-width: 400px; 
             width: 100%;
@@ -124,7 +159,9 @@
         }
 
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
-        .card h3 { color: #fff; margin-bottom: 15px; font-size: 1.4rem; }
+        
+        /* Corregimos H2 para SEO */
+        .card h2 { color: #fff; margin: 0 0 15px 0; font-size: 1.4rem; font-family: inherit; }
 
         .cta-btn { 
             display: inline-block; 
@@ -144,6 +181,14 @@
             background: var(--accent); 
             color: #000;
             box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* RESPONSIVIDAD (Arregla el error de CSS Media Queries) */
+        @media (max-width: 768px) {
+            .hero { padding: 80px 20px; }
+            .main-logo { max-width: 280px; }
+            .card { width: 100%; max-width: 320px; }
+            .lang-switcher { right: 15px; top: 15px; }
         }
 
         /* CHATBOT STYLES */
@@ -241,9 +286,9 @@
     </div>
 
     <section class="hero">
-        <div id="hero-tag" style="color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.8rem;">Ciberseguridad & Marketing de Alta Conversión</div>
+        <h1 id="hero-tag">Ciberseguridad & Marketing de Alta Conversión</h1>
         
-        <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo">
+        <img src="logo-inf01.png" alt="INF01 - Expertos en Blindaje Digital" class="main-logo" width="400" height="150">
 
         <p id="hero-text">¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.</p>
         <a href="#" class="cta-btn" onclick="toggleChat(true)" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
@@ -252,17 +297,17 @@
     <section class="services">
         <div class="card">
             <i class="fas fa-user-shield"></i>
-            <h3 id="srv1-title">Blindaje de Identidad</h3>
+            <h2 id="srv1-title">Blindaje de Identidad</h2>
             <p id="srv1-text">Eliminamos la vulnerabilidad de correos gratuitos. Migración a infraestructura corporativa cifrada y segura.</p>
         </div>
         <div class="card">
             <i class="fas fa-chart-line"></i>
-            <h3 id="srv2-title">Ingeniería de Conversión</h3>
+            <h2 id="srv2-title">Ingeniería de Conversión</h2>
             <p id="srv2-text">Una web lenta le hace perder dinero. Creamos sitios de alto impacto que transforman visitantes en clientes reales.</p>
         </div>
         <div class="card">
             <i class="fas fa-microchip"></i>
-            <h3 id="srv3-title">Agentes IA de Élite</h3>
+            <h2 id="srv3-title">Agentes IA de Élite</h2>
             <p id="srv3-text">Sistemas autónomos que filtran, califican y cierran prospectos por usted. Su oficina operando 24/7.</p>
         </div>
     </section>
@@ -331,7 +376,7 @@
 
         let currentLang = 'es';
         let chatHistory = []; 
-        let currentBot = 'sales'; // Controla el flujo hacia /api/chat o /api/sales
+        let currentBot = 'sales'; 
         const chatContainer = document.getElementById('chat-container');
         const messagesDiv = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
@@ -351,9 +396,7 @@
             document.getElementById('srv3-text').innerText = texts[lang].srv3Text;
             document.getElementById('footer-copy').innerHTML = `<p>${texts[lang].footer}</p>`;
             
-            // Actualizar nombre según el bot activo
             document.getElementById('bot-header-name').innerText = (currentBot === 'security') ? texts[lang].botName : texts[lang].botNameSales;
-            
             userInput.placeholder = texts[lang].placeholder;
             
             const startMsg = (currentBot === 'security') ? texts[lang].botStart : texts[lang].botStartSales;
@@ -393,30 +436,23 @@
             }
             
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
             const msgId = "msg-" + Date.now();
             const thinkingText = (currentBot === 'security') ? texts[currentLang].thinking : texts[currentLang].thinkingSales;
             
             messagesDiv.innerHTML += `<div id="${msgId}" class="bot-msg"><b>INF01:</b> ${thinkingText}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Ruteo dinámico basado en el bot activo o el comando de inicio
             const endpoint = (message.includes("PROTOCOL_INIT") || currentBot === 'security') ? '/api/chat' : '/api/sales';
 
             try {
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        message: message, 
-                        history: chatHistory 
-                    })
+                    body: JSON.stringify({ message, history: chatHistory })
                 });
 
                 const data = await response.json();
                 const msgEl = document.getElementById(msgId);
-                
-                // Limpieza de etiquetas de control
                 const cleanReply = data.reply.replace('[CIERRE_AUTO]', '').replace('[INVITAR_CITA]', '').trim();
                 
                 if (msgEl) msgEl.innerHTML = cleanReply;
@@ -424,7 +460,6 @@
                 chatHistory.push({ role: "user", parts: [{ text: message }] });
                 chatHistory.push({ role: "model", parts: [{ text: cleanReply }] });
 
-                // Lógica de Cierre (Bot de Seguridad)
                 if (data.reply.includes('[CIERRE_AUTO]')) {
                     setTimeout(() => {
                         chatContainer.classList.add('chat-closed');
@@ -432,7 +467,6 @@
                     }, 8000);
                 }
 
-                // Lógica de Invitación a Cita (Bot de Ventas)
                 if (data.reply.includes('[INVITAR_CITA]')) {
                     setTimeout(() => {
                         messagesDiv.innerHTML += `<div class="bot-msg" style="border-left: 3px solid #ff9f43; background: rgba(255,159,67,0.05);"><b>Nota:</b> ¿Desea que agendemos una sesión estratégica directa con nuestro Director para auditar su caso?</div>`;
@@ -447,7 +481,6 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        // Carga inicial
         messagesDiv.innerHTML = `<div class="bot-msg">${texts[currentLang].botStartSales}</div>`;
     </script>
 </body>
