@@ -5,61 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INF01 | Ciberseguridad & IA de Élite</title>
     <meta name="description" content="INF01: Blindaje digital y marketing de alta conversión en Costa Rica y Miami.">
-    <meta name="google-site-verification" content="5DrPhuLt-kzLOBLRS_y4mEya9T-hCs0bUdpu38IfqBk" />
     <link rel="icon" type="image/png" href="favicon.png">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root { 
-            --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; 
-            --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.8); 
-        }
-
-        body { 
-            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
-            margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
-        }
-
+        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.8); }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .lang-switcher { position: fixed; top: 20px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
         .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; }
         .lang-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
-
         .hero { text-align: center; padding: 140px 20px; background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); }
-
-        .main-logo {
-            max-width: 400px; width: 100%; height: auto;
-            filter: drop-shadow(0 0 15px var(--accent));
-            margin-bottom: 20px; transition: 0.5s ease; cursor: pointer;
-            outline: none; -webkit-tap-highlight-color: transparent;
-        }
-
-        @media (min-width: 769px) {
-            .main-logo:hover {
-                filter: drop-shadow(0 0 25px var(--accent)) drop-shadow(0 0 50px var(--neon-glow)) !important;
-                transform: scale(1.03);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero { padding: 80px 20px; }
-            .main-logo { 
-                max-width: 280px;
-                filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 40px var(--neon-glow)) !important;
-                transform: scale(1);
-            }
-        }
-
+        .main-logo { max-width: 400px; width: 100%; height: auto; filter: drop-shadow(0 0 15px var(--accent)); margin-bottom: 20px; transition: 0.5s ease; cursor: pointer; outline: none; }
+        @media (min-width: 769px) { .main-logo:hover { filter: drop-shadow(0 0 25px var(--accent)) drop-shadow(0 0 50px var(--neon-glow)) !important; transform: scale(1.03); } }
+        @media (max-width: 768px) { .hero { padding: 80px 20px; } .main-logo { max-width: 280px; filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 40px var(--neon-glow)) !important; } }
         h1#hero-tag { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; }
         .hero p { font-size: 1.1rem; color: #8b949e; max-width: 600px; margin: 25px auto; line-height: 1.6; }
         .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 80px; margin-top: -60px; }
         .card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 40px 30px; width: 280px; text-align: center; transition: 0.4s; }
-        .card:hover { border-color: var(--accent); transform: translateY(-10px); }
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
         .cta-btn { display: inline-block; background: transparent; color: var(--accent); padding: 18px 40px; text-decoration: none; border: 2px solid var(--accent); border-radius: 50px; font-weight: bold; transition: 0.3s; cursor: pointer; }
         .cta-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
-
         #chat-container { position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 1000; transition: 0.3s; }
         .chat-closed { transform: scale(0); opacity: 0; pointer-events: none; }
         #chat-header { background: rgba(88, 166, 255, 0.1); padding: 15px; border-bottom: 1px solid #30363d; color: var(--accent); font-weight: bold; display: flex; justify-content: space-between; }
@@ -74,25 +39,21 @@
     </style>
 </head>
 <body>
-
     <div class="lang-switcher">
         <button id="btn-es" class="lang-btn active" onclick="changeLanguage('es')">ES</button>
         <button id="btn-en" class="lang-btn" onclick="changeLanguage('en')">EN</button>
     </div>
-
     <section class="hero">
         <h1 id="hero-tag">Ciberseguridad & Marketing de Alta Conversión</h1>
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo" width="400" height="150">
         <p id="hero-text">¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.</p>
-        <a href="#" class="cta-btn" onclick="toggleChat()"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
+        <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
     </section>
-
     <section class="services">
         <div class="card"><i class="fas fa-user-shield"></i><h2 id="srv1-title">Blindaje de Identidad</h2><p id="srv1-text">Eliminamos la vulnerabilidad de correos gratuitos.</p></div>
         <div class="card"><i class="fas fa-chart-line"></i><h2 id="srv2-title">Ingeniería de Conversión</h2><p id="srv2-text">Sitios que transforman visitantes en clientes reales.</p></div>
         <div class="card"><i class="fas fa-microchip"></i><h2 id="srv3-title">Agentes IA de Élite</h2><p id="srv3-text">Sistemas autónomos que operan su oficina 24/7.</p></div>
     </section>
-
     <div id="chat-container" class="chat-closed">
         <div id="chat-header"><span id="bot-header-name">🛡️ Agente de Seguridad INF01</span><span onclick="toggleChat()" style="cursor:pointer">&times;</span></div>
         <div id="chat-messages"></div>
@@ -101,26 +62,43 @@
             <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
-
-    <footer><p>&copy; 2026 INF01 | Costa Rica & Miami</p></footer>
+    <footer id="footer-copy"><p>&copy; 2026 INF01 | Costa Rica & Miami</p></footer>
 
     <script>
         const translations = {
             es: {
+                heroTag: "Ciberseguridad & Marketing de Alta Conversión",
+                heroText: "¿Su reputación profesional depende de una cuenta de @gmail.com? Es hora de blindar su práctica con el estándar INF01.",
+                heroCta: "Iniciar Diagnóstico de Blindaje",
+                srv1Title: "Blindaje de Identidad", srv1Text: "Eliminamos la vulnerabilidad de correos gratuitos.",
+                srv2Title: "Ingeniería de Conversión", srv2Text: "Sitios de alto impacto que transforman visitantes en clientes.",
+                srv3Title: "Agentes IA de Élite", srv3Text: "Sistemas autónomos que operan su oficina 24/7.",
+                footer: "© 2026 INF01 | Costa Rica & Miami",
                 welcome: "<b>¡Bienvenido a INF01!</b> Soy su Especialista Senior. Debo realizarle 5 preguntas clave. ¿Iniciamos?",
                 questions: ["", "1. ¿Usa correos gratuitos (@gmail/@yahoo)?", "2. ¿Tiene activa la Verificación MFA?", "3. ¿Su web carga en menos de 2s?", "4. ¿Usa IA para atender clientes?", "5. ¿Sabía que una brecha hoy le costaría prestigio y multas?"],
                 result: "<b>RESULTADO:</b> Riesgo <b>CRÍTICO</b>. Para preparar su reporte técnico, dígame su <b>Nombre y Correo</b>.",
-                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará automáticamente en 1 minuto. Su información será enviada a un técnico para ser atendido personalmente vía WhatsApp.",
+                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará automáticamente en 1 minuto. Su información será enviada a un técnico para ser atendido vía WhatsApp.",
                 wa_intro: "⚠️ *REPORTE TÉCNICO INF01*\n\n",
-                wa_btn: "TRANSFERIR DIAGNÓSTICO AL TÉCNICO"
+                wa_btn: "TRANSFERIR DIAGNÓSTICO AL TÉCNICO",
+                header: "🛡️ Agente de Seguridad INF01",
+                placeholder: "Escriba aquí..."
             },
             en: {
+                heroTag: "Cybersecurity & High-Conversion Marketing",
+                heroText: "Does your professional reputation depend on a @gmail account? It's time to shield your practice with the INF01 standard.",
+                heroCta: "Start Shielding Diagnosis",
+                srv1Title: "Identity Shielding", srv1Text: "We eliminate the vulnerability of free email accounts.",
+                srv2Title: "Conversion Engineering", srv2Text: "High-impact sites that turn visitors into real clients.",
+                srv3Title: "Elite AI Agents", srv3Text: "Autonomous systems operating your office 24/7.",
+                footer: "© 2026 INF01 | Miami & Costa Rica",
                 welcome: "<b>Welcome to INF01!</b> I am your Senior Specialist. I need to ask 5 key questions. Start?",
                 questions: ["", "1. Do you use free email accounts?", "2. Is MFA active on your accounts?", "3. Does your web load in <2s?", "4. Do you use AI for leads?", "5. Did you know a breach costs $15k-$50k?"],
                 result: "<b>RESULT:</b> <b>CRITICAL</b> risk. To prepare your technical report, provide your <b>Name and Email</b>.",
-                final: "<b>DIAGNOSIS COMPLETED.</b> This session will automatically close in 1 minute. Information will be sent to a technician for personal attention via WhatsApp.",
+                final: "<b>DIAGNOSIS COMPLETED.</b> This session will automatically close in 1 minute. Information will be sent to a technician via WhatsApp.",
                 wa_intro: "⚠️ *INF01 TECHNICAL REPORT*\n\n",
-                wa_btn: "TRANSFER DIAGNOSIS TO TECHNICIAN"
+                wa_btn: "TRANSFER DIAGNOSIS TO TECHNICIAN",
+                header: "🛡️ INF01 Security Agent",
+                placeholder: "Type here..."
             }
         };
 
@@ -134,14 +112,27 @@
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
+            
+            // ACTUALIZACIÓN DE INTERFAZ (UI)
+            document.getElementById('hero-tag').innerText = translations[lang].heroTag;
+            document.getElementById('hero-text').innerText = translations[lang].heroText;
+            document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${translations[lang].heroCta}`;
+            document.getElementById('srv1-title').innerText = translations[lang].srv1Title;
+            document.getElementById('srv1-text').innerText = translations[lang].srv1Text;
+            document.getElementById('srv2-title').innerText = translations[lang].srv2Title;
+            document.getElementById('srv2-text').innerText = translations[lang].srv2Text;
+            document.getElementById('srv3-title').innerText = translations[lang].srv3Title;
+            document.getElementById('srv3-text').innerText = translations[lang].srv3Text;
+            document.getElementById('footer-copy').innerHTML = `<p>${translations[lang].footer}</p>`;
+            document.getElementById('bot-header-name').innerText = translations[lang].header;
+            userInput.placeholder = translations[lang].placeholder;
         }
 
         function toggleChat() {
             const container = document.getElementById('chat-container');
-            if (container.classList.contains('chat-closed')) {
-                messagesDiv.innerHTML = ""; etapa = 0; diagnosticAnswers = []; sendMessage("INIT");
-            }
+            const isOpening = container.classList.contains('chat-closed');
             container.classList.toggle('chat-closed');
+            if (isOpening) { messagesDiv.innerHTML = ""; etapa = 0; diagnosticAnswers = []; sendMessage("INIT"); }
         }
 
         function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
@@ -160,23 +151,15 @@
                 reply = `<b>${currentLang === 'es' ? 'Pregunta' : 'Question'} ${etapa}:</b> ` + t.questions[etapa];
                 etapa++;
             }
-            else if (etapa === 6) {
-                diagnosticAnswers.push(msg);
-                reply = t.result; etapa = 7;
-            }
+            else if (etapa === 6) { diagnosticAnswers.push(msg); reply = t.result; etapa = 7; }
             else if (etapa === 7) { 
                 const report = `${t.wa_intro}*CLIENTE:* ${msg}\n*HISTORIAL:* \n- Q1: ${diagnosticAnswers[0]}\n- Q2: ${diagnosticAnswers[1]}\n- Q3: ${diagnosticAnswers[2]}\n- Q4: ${diagnosticAnswers[3]}\n- Q5: ${diagnosticAnswers[4]}\n\n*ESTADO:* RIESGO CRÍTICO`;
                 const waUrl = `https://wa.me/50672057795?text=${encodeURIComponent(report)}`;
-                
                 reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> ${t.wa_btn}</a>`;
                 
-                // CAMBIO QUIRÚRGICO: Ahora se cierra en 60 segundos (60000ms)
                 setTimeout(() => { 
                     const container = document.getElementById('chat-container');
-                    if (!container.classList.contains('chat-closed')) {
-                        container.classList.add('chat-closed'); 
-                        etapa = 0; 
-                    }
+                    if (!container.classList.contains('chat-closed')) { container.classList.add('chat-closed'); etapa = 0; }
                 }, 60000);
             }
 
