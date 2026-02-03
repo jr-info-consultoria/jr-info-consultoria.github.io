@@ -13,55 +13,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --bg: #0d1117; 
-            --card-bg: #161b22; 
-            --accent: #58a6ff; 
-            --text: #c9d1d9; 
-            --neon-glow: rgba(88, 166, 255, 0.6);
-        }
-
-        body { 
-            background-color: var(--bg); color: var(--text); 
-            font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.6); }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .lang-switcher { position: fixed; top: 20px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
-        .lang-btn {
-            background: transparent; border: 1px solid var(--accent); color: var(--accent);
-            padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold;
-            font-size: 0.8rem; transition: 0.3s; text-transform: uppercase;
-        }
+        .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; transition: 0.3s; text-transform: uppercase; }
         .lang-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
-
         .hero { text-align: center; padding: 140px 20px; background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); }
-
-        /* LOGO CON EFECTO INTELIGENTE */
-        .main-logo {
-            max-width: 400px; width: 100%; height: auto;
-            filter: drop-shadow(0 0 10px var(--neon-glow));
-            margin-bottom: 20px; transition: 0.4s ease; cursor: pointer;
-            outline: none; -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Desktop: Brilla al pasar el mouse */
-        @media (min-width: 769px) {
-            .main-logo:hover {
-                filter: drop-shadow(0 0 25px var(--accent)) drop-shadow(0 0 45px var(--neon-glow));
-                transform: scale(1.02);
-            }
-        }
-
-        /* Mobile: Brilla siempre */
-        @media (max-width: 768px) {
-            .hero { padding: 80px 20px; }
-            .main-logo { 
-                max-width: 280px;
-                filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 35px var(--neon-glow)) !important;
-            }
-        }
-
+        .main-logo { max-width: 400px; width: 100%; height: auto; filter: drop-shadow(0 0 10px var(--neon-glow)); margin-bottom: 20px; transition: 0.4s ease; cursor: pointer; outline: none; }
+        @media (min-width: 769px) { .main-logo:hover { filter: drop-shadow(0 0 25px var(--accent)) drop-shadow(0 0 45px var(--neon-glow)); transform: scale(1.02); } }
+        @media (max-width: 768px) { .hero { padding: 80px 20px; } .main-logo { max-width: 280px; filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 35px var(--neon-glow)) !important; } }
         h1#hero-tag { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; }
         .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 80px; margin-top: -60px; }
         .card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 40px 30px; width: 280px; text-align: center; transition: 0.4s; }
@@ -69,14 +29,7 @@
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
         .cta-btn { display: inline-block; background: transparent; color: var(--accent); padding: 18px 40px; text-decoration: none; border: 2px solid var(--accent); border-radius: 50px; font-weight: bold; transition: 0.3s; cursor: pointer; }
         .cta-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
-
-        /* CHATBOT */
-        #chat-container {
-            position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px;
-            background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px;
-            display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            z-index: 1000; transition: 0.3s;
-        }
+        #chat-container { position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 1000; transition: 0.3s; }
         .chat-closed { transform: scale(0); opacity: 0; pointer-events: none; }
         #chat-header { background: rgba(88, 166, 255, 0.1); padding: 15px; border-bottom: 1px solid #30363d; color: var(--accent); font-weight: bold; display: flex; justify-content: space-between; }
         #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem; scroll-behavior: smooth; }
@@ -86,7 +39,6 @@
         #user-input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
         .send-btn { background: var(--accent); color: #000; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .wa-btn { display: block; background: #25d366; color: #fff; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; }
-
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.8rem; }
     </style>
 </head>
@@ -137,8 +89,8 @@
                 q4: "4. ¿Tiene Agentes de IA atendiendo clientes 24/7?",
                 q5: "5. ¿Sabía que una brecha hoy le costaría miles en multas locales y pérdida de prestigio?",
                 result: "<b>RESULTADO:</b> Vulnerabilidades <b>CRÍTICAS</b> detectadas. Para enviarle el reporte, dígame su <b>Nombre y Correo</b>.",
-                final: "<b>¡DATOS LISTOS!</b> Para blindar su cuenta ahora, toque el botón de abajo para confirmar su diagnóstico por WhatsApp.",
-                wa_msg: "Hola Jose, acabo de terminar mi diagnóstico en INF01 y tengo riesgo CRÍTICO. Mi nombre y correo son: ",
+                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará automáticamente. La información será enviada a un técnico de INF01 para ser atendido personalmente vía WhatsApp.",
+                wa_intro: "REPORTE TÉCNICO INF01 - COSTA RICA/MIAMI\n",
                 header: "🛡️ Agente de Seguridad INF01",
                 placeholder: "Escriba aquí..."
             },
@@ -156,8 +108,8 @@
                 q4: "4. Do you have AI Agents handling leads 24/7?",
                 q5: "5. Did you know a breach today would cost you $15k-$50k in SBA fines?",
                 result: "<b>RESULT:</b> <b>CRITICAL</b> vulnerabilities detected. To receive the report, please provide your <b>Name and Email</b>.",
-                final: "<b>DATA READY!</b> To shield your account now, tap the button below to confirm your diagnosis via WhatsApp.",
-                wa_msg: "Hi Jose, I just finished my diagnosis at INF01 and I have CRITICAL risk. My name and email are: ",
+                final: "<b>DIAGNOSIS COMPLETED.</b> This session will close automatically. The information will be sent to an INF01 technician for personal attention via WhatsApp.",
+                wa_intro: "INF01 TECHNICAL REPORT - MIAMI/COSTA RICA\n",
                 header: "🛡️ INF01 Security Agent",
                 placeholder: "Type here..."
             }
@@ -165,7 +117,7 @@
 
         let currentLang = 'es';
         let etapa = 0;
-        let userData = "";
+        let diagnosticAnswers = [];
         const messagesDiv = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
 
@@ -173,7 +125,6 @@
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
-            
             document.getElementById('hero-tag').innerText = translations[lang].heroTag;
             document.getElementById('hero-text').innerText = translations[lang].heroText;
             document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${translations[lang].heroCta}`;
@@ -190,7 +141,7 @@
             const container = document.getElementById('chat-container');
             const isOpening = container.classList.contains('chat-closed');
             container.classList.toggle('chat-closed');
-            if (isOpening) { messagesDiv.innerHTML = ""; etapa = 0; sendMessage("INIT"); }
+            if (isOpening) { messagesDiv.innerHTML = ""; etapa = 0; diagnosticAnswers = []; sendMessage("INIT"); }
         }
 
         function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
@@ -205,15 +156,31 @@
 
             if (etapa === 0) { reply = t.welcome; etapa = 1; }
             else if (etapa >= 1 && etapa <= 5) {
+                diagnosticAnswers.push(`Q${etapa}: ${msg}`); // Guardar respuestas
                 reply = `<b>${currentLang === 'es' ? 'Pregunta' : 'Question'} ${etapa}:</b> ` + t["q" + etapa];
                 etapa++;
             }
-            else if (etapa === 6) { reply = t.result; etapa = 7; }
+            else if (etapa === 6) {
+                diagnosticAnswers.push(`Q5: ${msg}`);
+                reply = t.result; etapa = 7;
+            }
             else if (etapa === 7) { 
-                userData = msg; // Guardamos nombre y correo
-                const waUrl = `https://wa.me/50672057795?text=${encodeURIComponent(t.wa_msg + userData)}`;
-                reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> Enviar a Jose Ruiz</a>`;
-                etapa = 8;
+                const userData = msg;
+                const reportSummary = t.wa_intro + "------------------\n" + 
+                                      "CLIENTE: " + userData + "\n" +
+                                      "------------------\n" +
+                                      diagnosticAnswers.join("\n") + "\n" +
+                                      "ESTADO: RIESGO CRÍTICO";
+
+                const waUrl = `https://wa.me/50672057795?text=${encodeURIComponent(reportSummary)}`;
+                
+                reply = `${t.final} <br><br><a href="${waUrl}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> Transferir Diagnóstico al Técnico</a>`;
+                
+                // Temporizador de cierre automático (12 segundos para dar tiempo a hacer clic)
+                setTimeout(() => { 
+                    document.getElementById('chat-container').classList.add('chat-closed'); 
+                    etapa = 0; 
+                }, 12000);
             }
 
             messagesDiv.innerHTML += `<div class="bot-msg"><b>INF01:</b> ${reply}</div>`;
