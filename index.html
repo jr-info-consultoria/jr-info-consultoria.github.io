@@ -3,22 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INF01 | Ciberseguridad & IA</title>
-    <meta name="description" content="INF01: Blindaje digital y marketing de élite.">
+    <title>INF01 | Ciberseguridad & IA de Élite</title>
+    <meta name="description" content="INF01: Blindaje digital y marketing de alta conversión en Costa Rica y Miami.">
+    <meta name="google-site-verification" content="5DrPhuLt-kzLOBLRS_y4mEya9T-hCs0bUdpu38IfqBk" />
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.6); }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; -webkit-tap-highlight-color: transparent; }
+        :root { 
+            --bg: #0d1117; --card-bg: #161b22; --accent: #58a6ff; 
+            --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.8); 
+        }
+
+        body { 
+            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
+            margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
+        }
+
         .lang-switcher { position: fixed; top: 20px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
-        .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
+        .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; }
         .lang-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
+
         .hero { text-align: center; padding: 140px 20px; background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); }
-        .main-logo { max-width: 400px; width: 100%; height: auto; filter: drop-shadow(0 0 10px var(--neon-glow)); margin-bottom: 20px; transition: 0.4s; cursor: pointer; }
-        @media (max-width: 768px) { .hero { padding: 80px 20px; } .main-logo { max-width: 280px; filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 35px var(--neon-glow)) !important; } }
+
+        /* --- EFECTO NEÓN RECONECTADO --- */
+        .main-logo {
+            max-width: 400px; width: 100%; height: auto;
+            filter: drop-shadow(0 0 15px var(--accent));
+            margin-bottom: 20px; transition: 0.5s ease; cursor: pointer;
+            outline: none; -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Desktop: Efecto Hover */
+        @media (min-width: 769px) {
+            .main-logo:hover {
+                filter: drop-shadow(0 0 25px var(--accent)) drop-shadow(0 0 50px var(--neon-glow)) !important;
+                transform: scale(1.03);
+            }
+        }
+
+        /* Móvil: Neón Fijo y Fuerte */
+        @media (max-width: 768px) {
+            .hero { padding: 80px 20px; }
+            .main-logo { 
+                max-width: 280px;
+                filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 40px var(--neon-glow)) !important;
+                transform: scale(1);
+            }
+        }
+
+        h1#hero-tag { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; }
+        .hero p { font-size: 1.1rem; color: #8b949e; max-width: 600px; margin: 25px auto; line-height: 1.6; }
         .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 80px; margin-top: -60px; }
         .card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 40px 30px; width: 280px; text-align: center; transition: 0.4s; }
-        .cta-btn { display: inline-block; background: transparent; color: var(--accent); padding: 18px 40px; text-decoration: none; border: 2px solid var(--accent); border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
+        .cta-btn { display: inline-block; background: transparent; color: var(--accent); padding: 18px 40px; text-decoration: none; border: 2px solid var(--accent); border-radius: 50px; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .cta-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
+
+        /* CHATBOT */
         #chat-container { position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 1000; transition: 0.3s; }
         .chat-closed { transform: scale(0); opacity: 0; pointer-events: none; }
         #chat-header { background: rgba(88, 166, 255, 0.1); padding: 15px; border-bottom: 1px solid #30363d; color: var(--accent); font-weight: bold; display: flex; justify-content: space-between; }
@@ -28,7 +73,7 @@
         #chat-input-area { padding: 15px; border-top: 1px solid #30363d; display: flex; gap: 10px; }
         #user-input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
         .send-btn { background: var(--accent); color: #000; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .wa-btn { display: block; background: #25d366; color: #fff; text-align: center; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; border: 2px solid #fff; }
+        .wa-btn { display: block; background: #25d366; color: #fff; text-align: center; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; border: 1px solid #fff; }
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.8rem; }
     </style>
 </head>
@@ -66,20 +111,20 @@
     <script>
         const translations = {
             es: {
-                welcome: "<b>¡Bienvenido a INF01!</b> Para un diagnóstico real, debe responder 5 preguntas clave. ¿Iniciamos?",
+                welcome: "<b>¡Bienvenido a INF01!</b> Soy su Especialista Senior. Debo realizarle 5 preguntas clave. ¿Iniciamos?",
                 questions: ["", "1. ¿Usa correos gratuitos (@gmail/@yahoo)?", "2. ¿Tiene activa la Verificación MFA?", "3. ¿Su web carga en menos de 2s?", "4. ¿Usa IA para atender clientes?", "5. ¿Sabía que una brecha hoy le costaría prestigio y multas?"],
-                result: "<b>RESULTADO:</b> Riesgo <b>CRÍTICO</b>. Para enviar el reporte al técnico, dígame su <b>Nombre y Correo</b>.",
-                final: "<b>SESIÓN COMPLETADA.</b> La información se ha preparado. <b>Para recibir atención inmediata de un técnico vía WhatsApp, toque el botón verde abajo:</b>",
+                result: "<b>RESULTADO:</b> Riesgo <b>CRÍTICO</b>. Para preparar su reporte técnico, dígame su <b>Nombre y Correo</b>.",
+                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará. Su información será enviada a un técnico para ser atendido personalmente vía WhatsApp.",
                 wa_intro: "⚠️ *REPORTE TÉCNICO INF01*\n\n",
-                btn: "ENVIAR DIAGNÓSTICO AHORA"
+                wa_btn: "TRANSFERIR DIAGNÓSTICO AL TÉCNICO"
             },
             en: {
-                welcome: "<b>Welcome to INF01!</b> Answer 5 questions for a real diagnosis. Start?",
+                welcome: "<b>Welcome to INF01!</b> I am your Senior Specialist. I need to ask 5 key questions. Start?",
                 questions: ["", "1. Do you use free email accounts?", "2. Is MFA active on your accounts?", "3. Does your web load in <2s?", "4. Do you use AI for leads?", "5. Did you know a breach costs $15k-$50k?"],
-                result: "<b>RESULT:</b> <b>CRITICAL</b> risk. To send the report to a tech, provide your <b>Name and Email</b>.",
-                final: "<b>DIAGNOSIS READY.</b> Information prepared. <b>To receive personal attention via WhatsApp, tap the green button below:</b>",
+                result: "<b>RESULT:</b> <b>CRITICAL</b> risk. To prepare your technical report, provide your <b>Name and Email</b>.",
+                final: "<b>DIAGNOSIS COMPLETED.</b> This session will close. Information will be sent to a technician for personal attention via WhatsApp.",
                 wa_intro: "⚠️ *INF01 TECHNICAL REPORT*\n\n",
-                btn: "SEND DIAGNOSIS NOW"
+                wa_btn: "TRANSFER DIAGNOSIS TO TECHNICIAN"
             }
         };
 
@@ -116,7 +161,7 @@
             if (etapa === 0) { reply = t.welcome; etapa = 1; }
             else if (etapa >= 1 && etapa <= 5) {
                 diagnosticAnswers.push(msg);
-                reply = t.questions[etapa];
+                reply = `<b>${currentLang === 'es' ? 'Pregunta' : 'Question'} ${etapa}:</b> ` + t.questions[etapa];
                 etapa++;
             }
             else if (etapa === 6) {
@@ -124,14 +169,11 @@
                 reply = t.result; etapa = 7;
             }
             else if (etapa === 7) { 
-                const report = `${t.wa_intro}*CLIENTE:* ${msg}\n*HISTORIAL:* \n- Q1: ${diagnosticAnswers[1]}\n- Q2: ${diagnosticAnswers[2]}\n- Q3: ${diagnosticAnswers[3]}\n- Q4: ${diagnosticAnswers[4]}\n- Q5: ${diagnosticAnswers[5]}\n\n*ESTADO:* VULNERABLE`;
+                const report = `${t.wa_intro}*CLIENTE:* ${msg}\n*HISTORIAL:* \n- Q1: ${diagnosticAnswers[1]}\n- Q2: ${diagnosticAnswers[2]}\n- Q3: ${diagnosticAnswers[3]}\n- Q4: ${diagnosticAnswers[4]}\n- Q5: ${diagnosticAnswers[5]}\n\n*ESTADO:* RIESGO CRÍTICO`;
                 const waUrl = `https://wa.me/50672057795?text=${encodeURIComponent(report)}`;
                 
-                reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> ${t.btn}</a>`;
+                reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> ${t.wa_btn}</a>`;
                 
-                // DISPARO SEMI-AUTOMÁTICO: Intentar abrirlo de una vez
-                setTimeout(() => { window.open(waUrl, '_blank'); }, 2000);
-
                 setTimeout(() => { document.getElementById('chat-container').classList.add('chat-closed'); etapa = 0; }, 15000);
             }
 
