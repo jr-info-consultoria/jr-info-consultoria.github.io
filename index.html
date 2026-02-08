@@ -146,6 +146,11 @@
                 srv1Title: "Blindaje de Identidad", srv1Text: "Eliminamos la vulnerabilidad de correos gratuitos.",
                 srv2Title: "Infraestructura Digital", srv2Text: "Sitios de alto rendimiento que transforman visitantes en clientes.",
                 srv3Title: "Automatización con IA", srv3Text: "Agentes autónomos para captación de clientes 24/7.",
+                faqTitle: "Preguntas Críticas de Infraestructura",
+                faq1Q: "¿Por qué es un riesgo usar @gmail.com para mi negocio?",
+                faq1A: "Las cuentas gratuitas no permiten la implementación de protocolos SPF/DKIM/DMARC, lo que facilita que terceros suplanten su identidad y expone sus datos a minería de información publicitaria.",
+                faq2Q: "¿Qué es el Protocolo INF01 de Blindaje?",
+                faq2A: "Es un estándar técnico que migra su operación a Google Workspace con configuraciones de seguridad militar, cifrado de extremo a extremo y auditoría de accesos constante.",
                 footer: "© 2026 INF01 | Costa Rica",
                 welcome: "<b>¡Bienvenido a INF01!</b> Soy su Especialista Senior. Debo realizarle 5 preguntas clave. ¿Iniciamos?",
                 questions: ["", "1. ¿Usa correos gratuitos (@gmail/@yahoo)?", "2. ¿Tiene activa la Verificación MFA?", "3. ¿Su web carga en menos de 2s?", "4. ¿Usa IA para atender clientes?", "5. ¿Sabía que una brecha hoy le costaría prestigio y multas locales?"],
@@ -163,6 +168,11 @@
                 srv1Title: "Identity Shielding", srv1Text: "We eliminate the vulnerability of free email accounts.",
                 srv2Title: "Digital Infrastructure", srv2Text: "High-performance sites that turn visitors into real clients.",
                 srv3Title: "AI Automation", srv3Text: "Autonomous agents for 24/7 lead generation.",
+                faqTitle: "Critical Infrastructure Questions",
+                faq1Q: "Why is using @gmail.com a risk for my business?",
+                faq1A: "Free accounts do not allow the implementation of SPF/DKIM/DMARC protocols, making it easy for third parties to impersonate your identity and exposing your data to advertising mining.",
+                faq2Q: "What is the INF01 Shielding Protocol?",
+                faq2A: "It is a technical standard that migrates your operation to Google Workspace with military-grade security settings, end-to-end encryption, and constant access auditing.",
                 footer: "© 2026 INF01 | Costa Rica",
                 welcome: "<b>Welcome to INF01!</b> I am your Senior Specialist. I need to ask 5 key questions. Start?",
                 questions: ["", "1. Do you use free email accounts?", "2. Is MFA active on your accounts?", "3. Does your web load in <2s?", "4. Do you use AI for leads?", "5. Did you know a breach costs $15k-$50k in SBA fines?"],
@@ -186,18 +196,27 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
             
-            document.getElementById('hero-tag').innerText = translations[lang].heroTag;
-            document.getElementById('hero-text').innerText = translations[lang].heroText;
-            document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${translations[lang].heroCta}`;
-            document.getElementById('srv1-title').innerText = translations[lang].srv1Title;
-            document.getElementById('srv1-text').innerText = translations[lang].srv1Text;
-            document.getElementById('srv2-title').innerText = translations[lang].srv2Title;
-            document.getElementById('srv2-text').innerText = translations[lang].srv2Text;
-            document.getElementById('srv3-title').innerText = translations[lang].srv3Title;
-            document.getElementById('srv3-text').innerText = translations[lang].srv3Text;
-            document.getElementById('footer-copy').innerHTML = `<p>${translations[lang].footer}</p> <div class="social-links"><a href="https://www.linkedin.com/in/inf01" target="_blank"><i class="fab fa-linkedin"></i></a> <a href="https://wa.me/50672057795" target="_blank"><i class="fab fa-whatsapp"></i></a></div>`;
-            document.getElementById('bot-header-name').innerText = translations[lang].header;
-            userInput.placeholder = translations[lang].placeholder;
+            const t = translations[lang];
+            document.getElementById('hero-tag').innerText = t.heroTag;
+            document.getElementById('hero-text').innerText = t.heroText;
+            document.getElementById('hero-cta').innerHTML = `<i class="fas fa-robot"></i> ${t.heroCta}`;
+            document.getElementById('srv1-title').innerText = t.srv1Title;
+            document.getElementById('srv1-text').innerText = t.srv1Text;
+            document.getElementById('srv2-title').innerText = t.srv2Title;
+            document.getElementById('srv2-text').innerText = t.srv2Text;
+            document.getElementById('srv3-title').innerText = t.srv3Title;
+            document.getElementById('srv3-text').innerText = t.srv3Text;
+            
+            // ACTUALIZACIÓN DE FAQ
+            document.getElementById('faq-main-title').innerText = t.faqTitle;
+            document.getElementById('faq1-q').innerText = t.faq1Q;
+            document.getElementById('faq1-a').innerText = t.faq1A;
+            document.getElementById('faq2-q').innerText = t.faq2Q;
+            document.getElementById('faq2-a').innerText = t.faq2A;
+
+            document.getElementById('footer-copy').innerHTML = `<p>${t.footer}</p> <div class="social-links"><a href="https://www.linkedin.com/in/inf01" target="_blank"><i class="fab fa-linkedin"></i></a> <a href="https://wa.me/50672057795" target="_blank"><i class="fab fa-whatsapp"></i></a></div>`;
+            document.getElementById('bot-header-name').innerText = t.header;
+            userInput.placeholder = t.placeholder;
         }
 
         function toggleChat() {
