@@ -26,12 +26,18 @@
             --text: #c9d1d9; --neon-glow: rgba(88, 166, 255, 0.8); 
         }
         body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        .lang-switcher { position: fixed; top: 20px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
+        
+        /* BARRA DE URGENCIA */
+        .alert-bar { background: #b91c1c; color: #fff; text-align: center; padding: 10px; font-size: 0.85rem; font-weight: bold; position: sticky; top: 0; z-index: 3000; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .blink { animation: blinker 2s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0.7; } }
+
+        .lang-switcher { position: fixed; top: 50px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
         .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; }
         .lang-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
+        
         .hero { text-align: center; padding: 140px 20px; background: radial-gradient(circle at top, #1e293b 0%, #0d1117 100%); }
 
-        /* LOGO NEÓN */
         .main-logo {
             max-width: 400px; width: 100%; height: auto;
             filter: drop-shadow(0 0 15px var(--accent));
@@ -43,11 +49,13 @@
         @media (max-width: 768px) {
             .hero { padding: 80px 20px; }
             .main-logo { max-width: 280px; filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 40px var(--neon-glow)) !important; }
+            .lang-switcher { top: 60px; right: 20px; }
         }
 
         h1#hero-tag { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; }
         .hero p { font-size: 1.1rem; color: #8b949e; max-width: 600px; margin: 25px auto; line-height: 1.6; }
-        .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 80px; margin-top: -60px; }
+        
+        .services { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px 40px; margin-top: -60px; }
         .card { 
             background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; 
             padding: 40px 30px; width: 280px; text-align: center; transition: 0.4s ease; 
@@ -56,10 +64,17 @@
         .card:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 0 20px rgba(88, 166, 255, 0.2); }
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
         .card h2 { color: #fff; margin: 0 0 15px 0; font-size: 1.4rem; }
+        
+        /* SECCIÓN FAQ */
+        .faq-section { padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+        .faq-grid { display: grid; gap: 20px; text-align: left; }
+        .faq-item { background: rgba(88, 166, 255, 0.05); padding: 25px; border-radius: 10px; border: 1px solid rgba(88, 166, 255, 0.1); }
+        .faq-item h3 { color: var(--accent); margin-top: 0; font-size: 1.1rem; }
+        .faq-item p { margin-bottom: 0; line-height: 1.5; font-size: 0.95rem; }
+
         .cta-btn { display: inline-block; background: transparent; color: var(--accent); padding: 18px 40px; text-decoration: none; border: 2px solid var(--accent); border-radius: 50px; font-weight: bold; transition: 0.3s; cursor: pointer; }
         .cta-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
 
-        /* CHATBOT */
         #chat-container { position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: var(--card-bg); border: 1px solid #30363d; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 1000; transition: 0.3s; }
         .chat-closed { transform: scale(0); opacity: 0; pointer-events: none; }
         #chat-header { background: rgba(88, 166, 255, 0.1); padding: 15px; border-bottom: 1px solid #30363d; color: var(--accent); font-weight: bold; display: flex; justify-content: space-between; }
@@ -79,21 +94,40 @@
     </style>
 </head>
 <body>
+    <div class="alert-bar"><span class="blink">🔴 ALERTA:</span> Se han detectado +1,200 intentos de vulneración en cuentas @gmail hoy. <span style="text-decoration: underline; cursor: pointer;" onclick="toggleChat()">Protege tu firma ahora.</span></div>
+    
     <div class="lang-switcher">
         <button id="btn-es" class="lang-btn active" onclick="changeLanguage('es')">ES</button>
         <button id="btn-en" class="lang-btn" onclick="changeLanguage('en')">EN</button>
     </div>
+
     <section class="hero">
         <h1 id="hero-tag">Blindaje de Datos & Ciberseguridad Corporativo</h1>
         <img src="logo-inf01.png" alt="INF01 Logo" class="main-logo" width="400" height="150">
         <p id="hero-text">¿Su firma depende de una cuenta de @gmail.com? Implemente el estándar INF01 de seguridad para Google Workspace y proteja su reputación hoy.</p>
         <a href="#" class="cta-btn" onclick="toggleChat()" id="hero-cta"><i class="fas fa-robot"></i> Iniciar Diagnóstico de Blindaje</a>
     </section>
+
     <section class="services">
         <div class="card"><i class="fas fa-user-shield"></i><h2 id="srv1-title">Blindaje de Identidad</h2><p id="srv1-text">Eliminamos la vulnerabilidad de correos gratuitos.</p></div>
         <div class="card"><i class="fas fa-chart-line"></i><h2 id="srv2-title">Infraestructura Digital</h2><p id="srv2-text">Sitios de alto rendimiento que transforman visitantes en clientes.</p></div>
         <div class="card"><i class="fas fa-microchip"></i><h2 id="srv3-title">Automatización con IA</h2><p id="srv3-text">Agentes autónomos para captación de clientes 24/7.</p></div>
     </section>
+
+    <section class="faq-section">
+        <h2 id="faq-main-title" style="text-align: center; color: #fff; margin-bottom: 40px;">Preguntas Críticas de Infraestructura</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3 id="faq1-q">¿Por qué es un riesgo usar @gmail.com para mi negocio?</h3>
+                <p id="faq1-a">Las cuentas gratuitas no permiten la implementación de protocolos SPF/DKIM/DMARC, lo que facilita que terceros suplanten su identidad y expone sus datos a minería de información publicitaria.</p>
+            </div>
+            <div class="faq-item">
+                <h3 id="faq2-q">¿Qué es el Protocolo INF01 de Blindaje?</h3>
+                <p id="faq2-a">Es un estándar técnico que migra su operación a Google Workspace con configuraciones de seguridad militar, cifrado de extremo a extremo y auditoría de accesos constante.</p>
+            </div>
+        </div>
+    </section>
+
     <div id="chat-container" class="chat-closed">
         <div id="chat-header"><span id="bot-header-name">🛡️ Agente de Seguridad INF01</span><span onclick="toggleChat()" style="cursor:pointer">&times;</span></div>
         <div id="chat-messages"></div>
@@ -102,6 +136,7 @@
             <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
+
     <footer id="footer-copy">
         <p>&copy; 2026 INF01 | Costa Rica</p>
         <div class="social-links">
@@ -127,7 +162,8 @@
                 email_intro: "⚠️ REPORTE TÉCNICO INF01\n\n",
                 email_btn: "ENVIAR DIAGNÓSTICO POR EMAIL",
                 header: "🛡️ Agente de Seguridad INF01",
-                placeholder: "Escriba aquí..."
+                placeholder: "Escriba aquí...",
+                alert: "🔴 ALERTA: Se han detectado +1,200 intentos de vulneración en cuentas @gmail hoy. Protege tu firma ahora."
             },
             en: {
                 heroTag: "Data Shielding & Corporate Cybersecurity",
@@ -144,7 +180,8 @@
                 email_intro: "⚠️ INF01 TECHNICAL REPORT\n\n",
                 email_btn: "SEND DIAGNOSIS VIA EMAIL",
                 header: "🛡️ INF01 Security Agent",
-                placeholder: "Type here..."
+                placeholder: "Type here...",
+                alert: "🔴 ALERT: +1,200 breach attempts on @gmail accounts detected today. Shield your firm now."
             }
         };
 
@@ -170,6 +207,7 @@
             document.getElementById('srv3-text').innerText = translations[lang].srv3Text;
             document.getElementById('footer-copy').innerHTML = `<p>${translations[lang].footer}</p> <div class="social-links"><a href="https://www.linkedin.com/in/inf01" target="_blank"><i class="fab fa-linkedin"></i></a> <a href="https://wa.me/50672057795" target="_blank"><i class="fab fa-whatsapp"></i></a></div>`;
             document.getElementById('bot-header-name').innerText = translations[lang].header;
+            document.querySelector('.alert-bar').innerHTML = `<span class="blink">${lang === 'es' ? '🔴 ALERTA:' : '🔴 ALERT:'}</span> ${translations[lang].alert.split(': ')[1]} <span style="text-decoration: underline; cursor: pointer;" onclick="toggleChat()">${lang === 'es' ? 'Protege tu firma ahora.' : 'Shield your firm now.'}</span>`;
             userInput.placeholder = translations[lang].placeholder;
         }
 
@@ -201,12 +239,9 @@
                 if(typeof gtag === 'function') {
                     gtag('event', 'generate_lead', { 'event_category': 'Chatbot', 'event_label': 'Diagnosis Completed' });
                 }
-
                 const reportBody = `${t.email_intro}CLIENTE: ${msg}\nHISTORIAL: \n- Q1: ${diagnosticAnswers[0]}\n- Q2: ${diagnosticAnswers[1]}\n- Q3: ${diagnosticAnswers[2]}\n- Q4: ${diagnosticAnswers[3]}\n- Q5: ${diagnosticAnswers[4]}\n\nESTADO: RIESGO CRÍTICO`;
                 const mailtoUrl = `mailto:blindaje@inf01.com?subject=NUEVO DIAGNÓSTICO INF01 - ${msg}&body=${encodeURIComponent(reportBody)}`;
-                
                 reply = `${t.final} <br><a href="${mailtoUrl}" class="email-btn"><i class="fas fa-envelope"></i> ${t.email_btn}</a>`;
-                
                 setTimeout(() => { 
                     const container = document.getElementById('chat-container');
                     if (!container.classList.contains('chat-closed')) { container.classList.add('chat-closed'); etapa = 0; }
