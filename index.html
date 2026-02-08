@@ -69,8 +69,13 @@
         #chat-input-area { padding: 15px; border-top: 1px solid #30363d; display: flex; gap: 10px; }
         #user-input { flex: 1; background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 10px; border-radius: 5px; outline: none; }
         .send-btn { background: var(--accent); color: #000; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .wa-btn { display: block; background: #25d366; color: #fff; text-align: center; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; border: 1px solid #fff; }
+        .email-btn { display: block; background: var(--accent); color: #000; text-align: center; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; border: 1px solid #fff; transition: 0.3s; }
+        .email-btn:hover { background: #fff; color: #000; }
+        
         footer { text-align: center; padding: 60px; border-top: 1px solid #30363d; color: #8b949e; font-size: 0.8rem; }
+        .social-links { margin-top: 20px; font-size: 1.5rem; }
+        .social-links a { color: var(--accent); margin: 0 15px; transition: 0.3s; text-decoration: none; }
+        .social-links a:hover { color: #fff; filter: drop-shadow(0 0 10px var(--accent)); }
     </style>
 </head>
 <body>
@@ -97,7 +102,13 @@
             <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
-    <footer id="footer-copy"><p>&copy; 2026 INF01 | Costa Rica & Miami</p></footer>
+    <footer id="footer-copy">
+        <p>&copy; 2026 INF01 | Costa Rica & Miami</p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/inf01" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://wa.me/50672057795" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </footer>
 
     <script>
         const translations = {
@@ -112,9 +123,9 @@
                 welcome: "<b>¡Bienvenido a INF01!</b> Soy su Especialista Senior. Debo realizarle 5 preguntas clave. ¿Iniciamos?",
                 questions: ["", "1. ¿Usa correos gratuitos (@gmail/@yahoo)?", "2. ¿Tiene activa la Verificación MFA?", "3. ¿Su web carga en menos de 2s?", "4. ¿Usa IA para atender clientes?", "5. ¿Sabía que una brecha hoy le costaría prestigio y multas locales?"],
                 result: "<b>RESULTADO:</b> Riesgo <b>CRÍTICO</b>. Para preparar su reporte técnico, dígame su <b>Nombre y Correo</b>.",
-                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Esta sesión se cerrará automáticamente en 1 minuto. Su información será enviada a un técnico para ser atendido vía WhatsApp.",
-                wa_intro: "⚠️ *REPORTE TÉCNICO INF01*\n\n",
-                wa_btn: "TRANSFERIR DIAGNÓSTICO AL TÉCNICO",
+                final: "<b>DIAGNÓSTICO COMPLETADO.</b> Hemos recibido su información. Será contactado vía correo electrónico para coordinar su sesión estratégica.",
+                email_intro: "⚠️ REPORTE TÉCNICO INF01\n\n",
+                email_btn: "ENVIAR DIAGNÓSTICO POR EMAIL",
                 header: "🛡️ Agente de Seguridad INF01",
                 placeholder: "Escriba aquí..."
             },
@@ -129,9 +140,9 @@
                 welcome: "<b>Welcome to INF01!</b> I am your Senior Specialist. I need to ask 5 key questions. Start?",
                 questions: ["", "1. Do you use free email accounts?", "2. Is MFA active on your accounts?", "3. Does your web load in <2s?", "4. Do you use AI for leads?", "5. Did you know a breach costs $15k-$50k in SBA fines?"],
                 result: "<b>RESULT:</b> <b>CRITICAL</b> risk. To prepare your technical report, provide your <b>Name and Email</b>.",
-                final: "<b>DIAGNOSIS COMPLETED.</b> This session will close in 1 minute. Information will be sent to a technician via WhatsApp.",
-                wa_intro: "⚠️ *INF01 TECHNICAL REPORT*\n\n",
-                wa_btn: "TRANSFER DIAGNOSIS TO TECHNICIAN",
+                final: "<b>DIAGNOSIS COMPLETED.</b> We have received your information. You will be contacted via email to coordinate your strategic session.",
+                email_intro: "⚠️ INF01 TECHNICAL REPORT\n\n",
+                email_btn: "SEND DIAGNOSIS VIA EMAIL",
                 header: "🛡️ INF01 Security Agent",
                 placeholder: "Type here..."
             }
@@ -157,7 +168,7 @@
             document.getElementById('srv2-text').innerText = translations[lang].srv2Text;
             document.getElementById('srv3-title').innerText = translations[lang].srv3Title;
             document.getElementById('srv3-text').innerText = translations[lang].srv3Text;
-            document.getElementById('footer-copy').innerHTML = `<p>${translations[lang].footer}</p>`;
+            document.getElementById('footer-copy').innerHTML = `<p>${translations[lang].footer}</p> <div class="social-links"><a href="https://www.linkedin.com/in/inf01" target="_blank"><i class="fab fa-linkedin"></i></a> <a href="https://wa.me/50672057795" target="_blank"><i class="fab fa-whatsapp"></i></a></div>`;
             document.getElementById('bot-header-name').innerText = translations[lang].header;
             userInput.placeholder = translations[lang].placeholder;
         }
@@ -187,14 +198,14 @@
             }
             else if (etapa === 6) { diagnosticAnswers.push(msg); reply = t.result; etapa = 7; }
             else if (etapa === 7) { 
-                // TRACKING: Diagnóstico completado
                 if(typeof gtag === 'function') {
                     gtag('event', 'generate_lead', { 'event_category': 'Chatbot', 'event_label': 'Diagnosis Completed' });
                 }
 
-                const report = `${t.wa_intro}*CLIENTE:* ${msg}\n*HISTORIAL:* \n- Q1: ${diagnosticAnswers[0]}\n- Q2: ${diagnosticAnswers[1]}\n- Q3: ${diagnosticAnswers[2]}\n- Q4: ${diagnosticAnswers[3]}\n- Q5: ${diagnosticAnswers[4]}\n\n*ESTADO:* RIESGO CRÍTICO`;
-                const waUrl = `https://wa.me/50672057795?text=${encodeURIComponent(report)}`;
-                reply = `${t.final} <br><a href="${waUrl}" target="_blank" class="wa-btn" onclick="trackWhatsAppClick()"><i class="fab fa-whatsapp"></i> ${t.wa_btn}</a>`;
+                const reportBody = `${t.email_intro}CLIENTE: ${msg}\nHISTORIAL: \n- Q1: ${diagnosticAnswers[0]}\n- Q2: ${diagnosticAnswers[1]}\n- Q3: ${diagnosticAnswers[2]}\n- Q4: ${diagnosticAnswers[3]}\n- Q5: ${diagnosticAnswers[4]}\n\nESTADO: RIESGO CRÍTICO`;
+                const mailtoUrl = `mailto:blindaje@inf01.com?subject=NUEVO DIAGNÓSTICO INF01 - ${msg}&body=${encodeURIComponent(reportBody)}`;
+                
+                reply = `${t.final} <br><a href="${mailtoUrl}" class="email-btn"><i class="fas fa-envelope"></i> ${t.email_btn}</a>`;
                 
                 setTimeout(() => { 
                     const container = document.getElementById('chat-container');
@@ -203,12 +214,6 @@
             }
             messagesDiv.innerHTML += `<div class="bot-msg"><b>INF01:</b> ${reply}</div>`;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function trackWhatsAppClick() {
-            if(typeof gtag === 'function') {
-                gtag('event', 'contact_whatsapp', { 'event_category': 'Chatbot', 'event_label': 'WhatsApp Transfer' });
-            }
         }
     </script>
 </body>
