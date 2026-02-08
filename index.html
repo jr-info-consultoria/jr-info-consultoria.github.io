@@ -27,12 +27,7 @@
         }
         body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
-        /* BARRA DE URGENCIA */
-        .alert-bar { background: #b91c1c; color: #fff; text-align: center; padding: 10px; font-size: 0.85rem; font-weight: bold; position: sticky; top: 0; z-index: 3000; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .blink { animation: blinker 2s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.7; } }
-
-        .lang-switcher { position: fixed; top: 50px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
+        .lang-switcher { position: fixed; top: 20px; right: 30px; display: flex; gap: 10px; z-index: 2000; }
         .lang-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; transition: 0.3s; }
         .lang-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
         
@@ -49,7 +44,6 @@
         @media (max-width: 768px) {
             .hero { padding: 80px 20px; }
             .main-logo { max-width: 280px; filter: drop-shadow(0 0 20px var(--accent)) drop-shadow(0 0 40px var(--neon-glow)) !important; }
-            .lang-switcher { top: 60px; right: 20px; }
         }
 
         h1#hero-tag { color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; }
@@ -94,8 +88,6 @@
     </style>
 </head>
 <body>
-    <div class="alert-bar"><span class="blink">🔴 ALERTA:</span> Se han detectado +1,200 intentos de vulneración en cuentas @gmail hoy. <span style="text-decoration: underline; cursor: pointer;" onclick="toggleChat()">Protege tu firma ahora.</span></div>
-    
     <div class="lang-switcher">
         <button id="btn-es" class="lang-btn active" onclick="changeLanguage('es')">ES</button>
         <button id="btn-en" class="lang-btn" onclick="changeLanguage('en')">EN</button>
@@ -162,8 +154,7 @@
                 email_intro: "⚠️ REPORTE TÉCNICO INF01\n\n",
                 email_btn: "ENVIAR DIAGNÓSTICO POR EMAIL",
                 header: "🛡️ Agente de Seguridad INF01",
-                placeholder: "Escriba aquí...",
-                alert: "🔴 ALERTA: Se han detectado +1,200 intentos de vulneración en cuentas @gmail hoy. Protege tu firma ahora."
+                placeholder: "Escriba aquí..."
             },
             en: {
                 heroTag: "Data Shielding & Corporate Cybersecurity",
@@ -180,8 +171,7 @@
                 email_intro: "⚠️ INF01 TECHNICAL REPORT\n\n",
                 email_btn: "SEND DIAGNOSIS VIA EMAIL",
                 header: "🛡️ INF01 Security Agent",
-                placeholder: "Type here...",
-                alert: "🔴 ALERT: +1,200 breach attempts on @gmail accounts detected today. Shield your firm now."
+                placeholder: "Type here..."
             }
         };
 
@@ -207,7 +197,6 @@
             document.getElementById('srv3-text').innerText = translations[lang].srv3Text;
             document.getElementById('footer-copy').innerHTML = `<p>${translations[lang].footer}</p> <div class="social-links"><a href="https://www.linkedin.com/in/inf01" target="_blank"><i class="fab fa-linkedin"></i></a> <a href="https://wa.me/50672057795" target="_blank"><i class="fab fa-whatsapp"></i></a></div>`;
             document.getElementById('bot-header-name').innerText = translations[lang].header;
-            document.querySelector('.alert-bar').innerHTML = `<span class="blink">${lang === 'es' ? '🔴 ALERTA:' : '🔴 ALERT:'}</span> ${translations[lang].alert.split(': ')[1]} <span style="text-decoration: underline; cursor: pointer;" onclick="toggleChat()">${lang === 'es' ? 'Protege tu firma ahora.' : 'Shield your firm now.'}</span>`;
             userInput.placeholder = translations[lang].placeholder;
         }
 
